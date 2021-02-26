@@ -9,14 +9,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite-url/tags/index.html</loc>
+    <loc>http://yoursite-url/2020/04/17/Hexo-Theme-LiveMyLife/</loc>
     
     <lastmod>2021-02-26</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite-url/about/index.html</loc>
+    <loc>http://yoursite-url/tags/index.html</loc>
     
     <lastmod>2021-02-26</lastmod>
     
@@ -30,14 +30,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite-url/categories/index.html</loc>
+    <loc>http://yoursite-url/about/index.html</loc>
     
     <lastmod>2021-02-26</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite-url/2020/04/17/Hexo-Theme-LiveMyLife/</loc>
+    <loc>http://yoursite-url/categories/index.html</loc>
     
     <lastmod>2021-02-26</lastmod>
     
@@ -60,6 +60,13 @@
 
   
   <url>
+    <loc>http://yoursite-url/tags/Wifi/</loc>
+    <lastmod>2021-02-26</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://yoursite-url/tags/Hexo/</loc>
     <lastmod>2021-02-26</lastmod>
     <changefreq>daily</changefreq>
@@ -73,24 +80,17 @@
     <priority>0.6</priority>
   </url>
   
-  <url>
-    <loc>http://yoursite-url/tags/Wifi/</loc>
-    <lastmod>2021-02-26</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
 
   
   <url>
-    <loc>http://yoursite-url/categories/Hexo-Theme-LiveMyLife/</loc>
+    <loc>http://yoursite-url/categories/Wifi/</loc>
     <lastmod>2021-02-26</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://yoursite-url/categories/Wifi/</loc>
+    <loc>http://yoursite-url/categories/Hexo-Theme-LiveMyLife/</loc>
     <lastmod>2021-02-26</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
