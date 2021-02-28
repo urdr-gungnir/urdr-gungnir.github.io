@@ -210,14 +210,14 @@
 
           
           <li>
-            <a href="/about/">About</a>
+            <a href="/archive/">Archives</a>
           </li>
           
           
 
           
           <li>
-            <a href="/archive/">Archives</a>
+            <a href="/about/">About</a>
           </li>
           
           
@@ -426,6 +426,119 @@ This LiveMyLife theme created by Vincent modified from the original Porter YenYu
   
 
 
+  <a href="/2021/02/28/Hgame-Week2-Web-forgetful/">
+    <h2 class="post-title">
+      Hgame-Week2-Web-forgetful
+    </h2>
+    <h3 class="post-subtitle">
+      CTF
+    </h3>
+    <div class="post-content-preview">
+      题解进去看到这道题我就想到了模板注入，一开始试了试xss，是可以的，又试了一下ssti，确实可以，所以这道题直接用基本的ssti注入方法就行，不过我在这里有个坑一直踩，导致我一直没做出来，就是，最后读取文件要用base64加密，要不然读出来是空白的。。。。我在这里卡了很久
+1&#123;% for c in [].__class__.__base__.__subclasses__() %&#......
+    </div>
+  </a>
+  
+  <p class="post-meta" style="margin: 10px 0;">
+    Posted by gungnir on
+    2021-02-28
+  </p>
+  <div class="tags">
+    
+    <a href="/tags/#CTF" title="CTF">CTF</a>
+    
+  </div>
+  
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+  
+  <!-- top start (article top hot config) -->
+  
+  <!-- top end -->
+  
+
+
+  <a href="/2021/02/28/Hgame-Week2-Web-200OK/">
+    <h2 class="post-title">
+      Hgme-Week2-Web-200OK!
+    </h2>
+    <h3 class="post-subtitle">
+      CTF
+    </h3>
+    <div class="post-content-preview">
+      题解题目是sql注入，抓到包后，可以看到status字段是由数据库回显的，所以使用脚本爆破就行，fuzz后可以写出有用的脚本
+这里我自己写了个脚本，但是不如师傅们写的，所以呢，我这里贴出师傅们的脚本
+12345678910111213141516171819202122232425262728293031import requestsimport stringimport res = req......
+    </div>
+  </a>
+  
+  <p class="post-meta" style="margin: 10px 0;">
+    Posted by gungnir on
+    2021-02-28
+  </p>
+  <div class="tags">
+    
+    <a href="/tags/#CTF" title="CTF">CTF</a>
+    
+  </div>
+  
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+  
+  <!-- top start (article top hot config) -->
+  
+  <!-- top end -->
+  
+
+
+  <a href="/2021/02/28/Hgame-Week2-Web-Liki的生日礼物/">
+    <h2 class="post-title">
+      Hgme-Week2-Web-Liki的生日礼物
+    </h2>
+    <h3 class="post-subtitle">
+      WP
+    </h3>
+    <div class="post-content-preview">
+      题记看到这种价格买东西的，无非是条件竞争、汇率转换、整数溢出等等，这里姿势是条件竞争。
+条件竞争
+官方概念是“发生在多个线程同时访问同一个共享代码、变量、文件等没有进行锁操作或者同步操作的场景中。这个漏洞存在于操作系统、数据库、web等多个层面，像有名的脏牛（dirty cow）。
+
+关键在于多线程和同时，如果多线程处理情况不到位，出现异常，就有可能引发这个漏洞。
+在这里漏洞的利用原理是，通......
+    </div>
+  </a>
+  
+  <p class="post-meta" style="margin: 10px 0;">
+    Posted by gungnir on
+    2021-02-28
+  </p>
+  <div class="tags">
+    
+    <a href="/tags/#CTF" title="CTF">CTF</a>
+    
+  </div>
+  
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+  
+  <!-- top start (article top hot config) -->
+  
+  <!-- top end -->
+  
+
+
   <a href="/2021/02/26/aircrack-ng破解wifi/">
     <h2 class="post-title">
       aircrack-ng破解wifi
@@ -507,6 +620,10 @@ WEP(Wi......
     
     
     <a href="/tags/#Hexo-Theme-LiveMyLife" title="Hexo-Theme-LiveMyLife" rel="1">Hexo-Theme-LiveMyLife</a>
+    
+    
+    
+    <a href="/tags/#CTF" title="CTF" rel="3">CTF</a>
     
     
     
@@ -598,6 +715,18 @@ WEP(Wi......
 <div class="widget">
   <ul>
     
+    <a href="2021/02/28/Hgame-Week2-Web-forgetful/">
+      <li>Hgame-Week2-Web-forgetful</li>
+    </a>
+    
+    <a href="2021/02/28/Hgame-Week2-Web-200OK/">
+      <li>Hgme-Week2-Web-200OK!</li>
+    </a>
+    
+    <a href="2021/02/28/Hgame-Week2-Web-Liki%E7%9A%84%E7%94%9F%E6%97%A5%E7%A4%BC%E7%89%A9/">
+      <li>Hgme-Week2-Web-Liki的生日礼物</li>
+    </a>
+    
     <a href="2021/02/26/aircrack-ng%E7%A0%B4%E8%A7%A3wifi/">
       <li>aircrack-ng破解wifi</li>
     </a>
@@ -635,7 +764,7 @@ WEP(Wi......
     <!-- <h5>ARCHIVES</h5> -->
     <h5><a href="/archives/">ARCHIVES</a></h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="archives/2021/02/">二月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2020/04/">四月 2020</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="archives/2021/02/">二月 2021</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2020/04/">四月 2020</a><span class="archive-list-count">1</span></li></ul>
     </div>
 
 
@@ -650,6 +779,10 @@ WEP(Wi......
     
     <a href="/categories/#Hexo-Theme-LiveMyLife">
       <li>Hexo-Theme-LiveMyLife</li>
+    </a>
+    
+    <a href="/categories/#CTF">
+      <li>CTF</li>
     </a>
     
     <a href="/categories/#Wifi">

