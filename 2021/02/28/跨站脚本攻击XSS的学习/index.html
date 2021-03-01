@@ -210,13 +210,6 @@
 
           
           <li>
-            <a href="/archive/">Archives</a>
-          </li>
-          
-          
-
-          
-          <li>
             <a href="/about/">About</a>
           </li>
           
@@ -232,6 +225,13 @@
           
           <li>
             <a href="/tags/">Tags</a>
+          </li>
+          
+          
+
+          
+          <li>
+            <a href="/archive/">Archives</a>
           </li>
           
           
@@ -287,10 +287,11 @@
 	<!-- Modified by Yu-Hsuan Yen -->
 <!-- Post Header -->
 
+  <!-- CDN: jsdelivr start -->
   <style type="text/css">
     header.intro-header {
        /*post*/
-        background-image: url('/img/header_img/lml_bg.jpg');
+        background-image: url('https://cdn.jsdelivr.net/gh/urdr-gungnir/urdr-gungnir.github.io/img/header_img/lml_bg.jpg');
       
     }
 
@@ -300,6 +301,7 @@
       }
     
   </style>
+  <!-- CDN: jsdelivr end -->
 
 
 
@@ -332,11 +334,11 @@
             <!-- WordCount start -->
             <div class="blank_box"></div>
             <span class="meta">
-              Estimated Reading Time <span class="post-count">8</span> Minutes
+              Estimated Reading Time <span class="post-count">10</span> Minutes
             </span>
             <div class="blank_box"></div>
             <span class="meta">
-              Words <span class="post-count">2k</span> In Total
+              Words <span class="post-count">2.4k</span> In Total
             </span>
             <div class="blank_box"></div>
             <!-- WordCount end -->
@@ -499,6 +501,23 @@
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">eval</span>(name);</span><br></pre></td></tr></table></figure>
 
 <p>便会执行alert(document.cookie)</p>
+<h2 id="5-XSS防御"><a href="#5-XSS防御" class="headerlink" title="5.XSS防御"></a>5.XSS防御</h2><h3 id="5-1-HttpOnly"><a href="#5-1-HttpOnly" class="headerlink" title="5.1 HttpOnly"></a>5.1 HttpOnly</h3><p>httponly可以禁止js读取cookie</p>
+<p>cookie是set-cookie时设立的，httponly也是set-cookie时设立的，需要注意，服务器可能设立多个cookie，而每一个cookie都要对应一个httponly。</p>
+<p>有的时候，应用需要js访问cookie，这种cookie就可以不加httponly</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="php"><span class="meta">&lt;?php</span></span></span><br><span class="line"></span><br><span class="line"><span class="php">header(<span class="string">"Set-Cookie:cookie1=test1;"</span>);</span></span><br><span class="line"><span class="php">header(<span class="string">"Set-Cookie:cookie2=test2;httponly"</span>,<span class="keyword">false</span>);</span></span><br><span class="line"></span><br><span class="line"><span class="php"><span class="meta">?&gt;</span></span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">	alert(<span class="built_in">document</span>.cookie);</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在这段代码中，cookie1没有httponly是可以被alert，cookie2不行</p>
+<p>httponly起到了应有的作用</p>
+<p>对于httponly前几年也有种绕过的方式，是用trace请求头来绕过，不过已经被解决</p>
+<h3 id="5-2-输入检查"><a href="#5-2-输入检查" class="headerlink" title="5.2 输入检查"></a>5.2 输入检查</h3><p>常见的WEB攻击如（XSS、SQL注入），会用到特殊字符，这些特殊字符正常用户是用不到的，所以，将这些字符禁止，可以起到抵御的效果</p>
+<p>一般都是用白名单来进行防御，黑名单较于白名单而言，更加的耗费资源且安全性低，输入检查的方式就叫 <strong>XSS-filter</strong></p>
+<p>但是XSS-filter会存在许多问题，最明显的，如果XSS-filter不够智能，不在适合的场景下，进行相对应的防御，可能会给用户带来不好的体验</p>
+<p>比如：</p>
+<p>用户输入</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>+<span class="number">1</span>&lt;<span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<p>但是因为‘&lt;’是被转义或者其他防御掉的，那么，用户收到的是与预期不符的结果</p>
+<h3 id="5-3-输出检查"><a href="#5-3-输出检查" class="headerlink" title="5.3 输出检查"></a>5.3 输出检查</h3><p>既然输入检查存在许多问题，那么我们在输出到html的时候，可以通过编码来或转义来防御XSS攻击</p>
 
 
         <hr>
@@ -637,7 +656,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#《白帽子讲web安全》XSS深度学习"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">《白帽子讲web安全》XSS深度学习</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1-XSS简介"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">1.XSS简介</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-XSS-payload初探"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">2.XSS payload初探</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#2-1窃取cookie"><span class="toc-nav-number">1.2.1.</span> <span class="toc-nav-text">2.1窃取cookie</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#2-2利用js进行post-get自动提交"><span class="toc-nav-number">1.2.2.</span> <span class="toc-nav-text">2.2利用js进行post&#x2F;get自动提交</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#（重点插入提示）"><span class="toc-nav-number">1.2.3.</span> <span class="toc-nav-text">（重点插入提示）</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-XSS-payload进阶"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">3.XSS payload进阶</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#3-1识别用户的浏览器"><span class="toc-nav-number">1.3.1.</span> <span class="toc-nav-text">3.1识别用户的浏览器</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#3-2识别用户所使用的软件"><span class="toc-nav-number">1.3.2.</span> <span class="toc-nav-text">3.2识别用户所使用的软件</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4-XSS-构造技巧"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text">4.XSS 构造技巧</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#4-1绕过长度编码"><span class="toc-nav-number">1.4.1.</span> <span class="toc-nav-text">4.1绕过长度编码</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#事件绕过"><span class="toc-nav-number">1.4.1.1.</span> <span class="toc-nav-text">事件绕过</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#location-hash绕过"><span class="toc-nav-number">1.4.1.2.</span> <span class="toc-nav-text">location.hash绕过</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#注释饶过"><span class="toc-nav-number">1.4.1.3.</span> <span class="toc-nav-text">注释饶过</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#使用base标签绕过"><span class="toc-nav-number">1.4.2.</span> <span class="toc-nav-text">使用base标签绕过</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#window-name的妙用"><span class="toc-nav-number">1.4.2.1.</span> <span class="toc-nav-text">window.name的妙用</span></a></li></ol></li></ol></li></ol></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#《白帽子讲web安全》XSS深度学习"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">《白帽子讲web安全》XSS深度学习</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1-XSS简介"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">1.XSS简介</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2-XSS-payload初探"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">2.XSS payload初探</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#2-1窃取cookie"><span class="toc-nav-number">1.2.1.</span> <span class="toc-nav-text">2.1窃取cookie</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#2-2利用js进行post-get自动提交"><span class="toc-nav-number">1.2.2.</span> <span class="toc-nav-text">2.2利用js进行post&#x2F;get自动提交</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#（重点插入提示）"><span class="toc-nav-number">1.2.3.</span> <span class="toc-nav-text">（重点插入提示）</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3-XSS-payload进阶"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">3.XSS payload进阶</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#3-1识别用户的浏览器"><span class="toc-nav-number">1.3.1.</span> <span class="toc-nav-text">3.1识别用户的浏览器</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#3-2识别用户所使用的软件"><span class="toc-nav-number">1.3.2.</span> <span class="toc-nav-text">3.2识别用户所使用的软件</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#4-XSS-构造技巧"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text">4.XSS 构造技巧</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#4-1绕过长度编码"><span class="toc-nav-number">1.4.1.</span> <span class="toc-nav-text">4.1绕过长度编码</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#事件绕过"><span class="toc-nav-number">1.4.1.1.</span> <span class="toc-nav-text">事件绕过</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#location-hash绕过"><span class="toc-nav-number">1.4.1.2.</span> <span class="toc-nav-text">location.hash绕过</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#注释饶过"><span class="toc-nav-number">1.4.1.3.</span> <span class="toc-nav-text">注释饶过</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#使用base标签绕过"><span class="toc-nav-number">1.4.2.</span> <span class="toc-nav-text">使用base标签绕过</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#window-name的妙用"><span class="toc-nav-number">1.4.2.1.</span> <span class="toc-nav-text">window.name的妙用</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#5-XSS防御"><span class="toc-nav-number">1.5.</span> <span class="toc-nav-text">5.XSS防御</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#5-1-HttpOnly"><span class="toc-nav-number">1.5.1.</span> <span class="toc-nav-text">5.1 HttpOnly</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#5-2-输入检查"><span class="toc-nav-number">1.5.2.</span> <span class="toc-nav-text">5.2 输入检查</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#5-3-输出检查"><span class="toc-nav-number">1.5.3.</span> <span class="toc-nav-text">5.3 输出检查</span></a></li></ol></li></ol></li></ol>
         
         </div>
       </aside>
@@ -863,6 +882,29 @@
   <!-- ThemeColor end -->
 
 
+
+  <!-- CDN: jsdelivr start -->
+  <script type="text/javascript">
+    let imgsUrl = document.getElementsByTagName("img");
+    let imgUrl = Array.from(imgsUrl);
+
+    let jsdelivr = "https://cdn.jsdelivr.net/gh/";
+    let gh = "urdr-gungnir";
+    let ghPages = gh + ".github.io";
+    let pagePath = "2021/02/28/跨站脚本攻击XSS的学习/";
+    let jsdelivrurl;
+    if (pagePath.indexOf("index.html") != -1) {
+      jsdelivrurl = jsdelivr + gh + "/" + ghPages;
+    }else{
+      jsdelivrurl = jsdelivr + gh + "/" + ghPages + "/" + pagePath;
+    }
+    imgUrl.forEach(item => {
+      let oldUrl = item.getAttribute("src");
+      let newUrl = oldUrl.replace(oldUrl, jsdelivrurl + oldUrl).replace("..","");
+      item.setAttribute("src", newUrl);
+    });
+  </script>
+  <!-- CDN: jsdelivr end -->
 
 
 
