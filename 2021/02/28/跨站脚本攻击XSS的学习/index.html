@@ -210,13 +210,6 @@
 
           
           <li>
-            <a href="/categories/">Categories</a>
-          </li>
-          
-          
-
-          
-          <li>
             <a href="/about/">About</a>
           </li>
           
@@ -224,14 +217,21 @@
 
           
           <li>
-            <a href="/tags/">Tags</a>
+            <a href="/archive/">Archives</a>
           </li>
           
           
 
           
           <li>
-            <a href="/archive/">Archives</a>
+            <a href="/categories/">Categories</a>
+          </li>
+          
+          
+
+          
+          <li>
+            <a href="/tags/">Tags</a>
           </li>
           
           
@@ -334,11 +334,11 @@
             <!-- WordCount start -->
             <div class="blank_box"></div>
             <span class="meta">
-              Estimated Reading Time <span class="post-count">16</span> Minutes
+              Estimated Reading Time <span class="post-count">17</span> Minutes
             </span>
             <div class="blank_box"></div>
             <span class="meta">
-              Words <span class="post-count">4k</span> In Total
+              Words <span class="post-count">4.1k</span> In Total
             </span>
             <div class="blank_box"></div>
             <!-- WordCount end -->
@@ -616,7 +616,9 @@
 <p>等，标签的选择上应该选择白名单，避免黑名单，只允许 </p>
 <figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">&lt;a&gt;</span><span class="section">&lt;img&gt;</span><span class="section">&lt;div&gt;</span></span><br></pre></td></tr></table></figure>
 
-<h3 id="5-6正确防御DOM-base-XSS"><a href="#5-6正确防御DOM-base-XSS" class="headerlink" title="5.6正确防御DOM base XSS"></a>5.6正确防御DOM base XSS</h3>
+<h3 id="5-6正确防御DOM-base-XSS"><a href="#5-6正确防御DOM-base-XSS" class="headerlink" title="5.6正确防御DOM base XSS"></a>5.6正确防御DOM base XSS</h3><p>为什么js中JavaScriptencode过的代码</p>
+<p>在js环境中，Javascriptencode是为了不让xss payload在js中产生效果，但是当js中document.write写入html的过程，会先给js中的代码解码，解完码再写入html，所以安全的防御是先JavaScriptencode再HTML encode。 在js环境中，会对js编码进行解码，比如\u的unicode，\x的十六进制形式，<code>\&#39;</code> <code>\&lt;</code> <code>\&gt;</code>等等。</p>
+
 
         <hr>
         <!-- Pager -->
