@@ -71,12 +71,12 @@
 
   <!-- Pygments Highlight CSS -->
   
-<link rel="stylesheet" href="../css/highlight.css">
-<link rel="stylesheet" href="../css/widget.css">
-<link rel="stylesheet" href="../css/rocket.css">
-<link rel="stylesheet" href="../css/signature.css">
-<link rel="stylesheet" href="../css/catalog.css">
-<link rel="stylesheet" href="../css/livemylife.css">
+<link rel="stylesheet" href="../../../../css/highlight.css">
+<link rel="stylesheet" href="../../../../css/widget.css">
+<link rel="stylesheet" href="../../../../css/rocket.css">
+<link rel="stylesheet" href="../../../../css/signature.css">
+<link rel="stylesheet" href="../../../../css/catalog.css">
+<link rel="stylesheet" href="../../../../css/livemylife.css">
 
 
   
@@ -138,10 +138,10 @@
   <!--[if lt IE 9]> <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script> <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script> <![endif]-->
 
   <!-- ga & ba script hoook -->
-  <link rel="canonical" href="http://yoursite-url/tags/">
+  <link rel="canonical" href="http://yoursite-url/2021/03/02/javascript中InnerHtml和InnerText的区别/">
   <title>
     
-    Tags - gungnir | 九日
+    javascript中InnerHtml和InnerText的区别 - gungnir | 九日
     
   </title>
 <meta name="generator" content="Hexo 4.2.1"></head>
@@ -290,8 +290,8 @@
   <!-- CDN: jsdelivr start -->
   <style type="text/css">
     header.intro-header {
-       /*page*/
-        background-image: url('https://cdn.jsdelivr.net/gh/urdr-gungnir/urdr-gungnir.github.io/img/header_img/tag_bg.jpg');
+       /*post*/
+        background-image: url('https://cdn.jsdelivr.net/gh/urdr-gungnir/urdr-gungnir.github.io/img/header_img/lml_bg.jpg');
       
     }
 
@@ -314,10 +314,42 @@
       <div class="row">
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
           
-          <div class="site-heading">
-            <h1>Tags</h1>
-            <!--<hr class="small">-->
-            <span class="subheading">I don’t know where I am going, but I am on my way......</span>
+          <div class="post-heading">
+            <div class="tags">
+              
+              <a class="tag" href="/tags/#JS" title="JS">JS</a>
+              
+            </div>
+            <h1>javascript中InnerHtml和InnerText的区别</h1>
+            <h2 class="subheading">JS</h2>
+            <span class="meta">
+              Posted by gungnir on
+              2021-03-02
+            </span>
+
+
+            
+            <!-- WordCount start -->
+            <div class="blank_box"></div>
+            <span class="meta">
+              Estimated Reading Time <span class="post-count">3</span> Minutes
+            </span>
+            <div class="blank_box"></div>
+            <span class="meta">
+              Words <span class="post-count">670</span> In Total
+            </span>
+            <div class="blank_box"></div>
+            <!-- WordCount end -->
+            
+            
+            <!-- 不蒜子统计 start -->
+            <span class="meta" id="busuanzi_container_page_pv">
+              Viewed <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span> Times
+            </span>
+            <!-- 不蒜子统计 end -->
+            
+
+
           </div>
           
         </div>
@@ -358,199 +390,264 @@
 	Friends Blog、
 	anchorjs、
 	) -->
-	<!-- Main Content -->
-<div class="container">
-  <div class="row">
-    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-      <!-- 标签云 -->
-      <div id='tag_cloud' class="tags">
+	<!-- Modify by Yu-Hsuan Yen -->
+<!-- Post Content -->
+<article>
+  <div class="container">
+    <div class="row">
+      <!-- Post Container -->
+      <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
+
+        <p>最近再研究xss方面，今天在做buuctf时，发现一道xss题目，在注入点（至少看起来是注入点。。。。）注入的xss payload全部都反射到html中，但是没有发挥作用，我偶然看到InnerHtml和InnerText的区别，现在看来有可能就是因为输出位置在js中，而源码中又是InnerText,所以导致即使输出到html中了，也并没有起作用，所以在此记录一下两个方法的区别</p>
+<p>jjinnerText：拿到的是文本，如果文本里面有&lt;&gt;尖括号，不会把&lt;&gt;尖括号当成html元素解析</p>
+<p>innerHTML：拿到的是文本，如果文本里面有&lt;&gt;尖括号，会把&lt;&gt;尖括号当成html元素解析</p>
+<p>其实innerHTML和innerText获取到的都是文本，唯一的区别就是如果文本中有&lt;&gt;尖括号，innerText不会把&lt;&gt;尖括号当成html元素解析，而innerHTML会把&lt;&gt;尖括号当成html元素解析</p>
+<p>下面是测试代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=<span class="string">"UTF-8"</span>&gt;</span><br><span class="line">&lt;title&gt;javascript(json知识点)-测试json中包含尖括号和innerText和innerHTML知识点&lt;<span class="regexp">/title&gt;</span></span><br><span class="line"><span class="regexp">&lt;script type="text/</span>javascript<span class="string">"&gt;</span></span><br><span class="line"><span class="string">	//json字符串</span></span><br><span class="line"><span class="string">	var jsonStr1 = '&#123; "</span>firstName<span class="string">":"</span>令狐冲<span class="string">" , "</span>lastName<span class="string">":"</span>Doe<span class="string">" &#125;';</span></span><br><span class="line"><span class="string">	</span></span><br><span class="line"><span class="string">	//json对象</span></span><br><span class="line"><span class="string">	var jsonStr2 = &#123;</span></span><br><span class="line"><span class="string">		"</span>firstName<span class="string">" : "</span>&lt;font color=\<span class="string">"blue\"&gt;张无忌&lt;/font&gt;"</span>,</span><br><span class="line">		<span class="string">"lastName"</span> : <span class="string">"Doe"</span></span><br><span class="line">	&#125;;</span><br><span class="line"> </span><br><span class="line">	<span class="built_in">window</span>.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">		addTextToDiv1();</span><br><span class="line">		addTextToDiv2();</span><br><span class="line">		addTextToDiv3();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//添加文本到div节点中</span></span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">addTextToDiv1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">		<span class="comment">//这种方式会直接把&lt;&gt;尖括号当成文本</span></span><br><span class="line">		<span class="keyword">var</span> myTextNode = <span class="built_in">document</span>.createTextNode(jsonStr2.firstName);</span><br><span class="line">		<span class="keyword">var</span> divNode = <span class="built_in">document</span>.getElementById(<span class="string">"div1"</span>);</span><br><span class="line">		divNode.appendChild(myTextNode);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//添加文本到div节点中</span></span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">addTextToDiv2</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">		<span class="keyword">var</span> divNode = <span class="built_in">document</span>.getElementById(<span class="string">"div1"</span>);</span><br><span class="line">		divNode.innerText += jsonStr2.firstName;</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">"innerText = "</span> + divNode.innerText);</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">"innerHTML = "</span> + divNode.innerHTML);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//添加文本到div节点中</span></span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">addTextToDiv3</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">		<span class="keyword">var</span> divNode = <span class="built_in">document</span>.getElementById(<span class="string">"div1"</span>);</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">"innerText = "</span> + divNode.innerText);</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">"innerHTML = "</span> + divNode.innerHTML);</span><br><span class="line">		divNode.innerHTML += jsonStr2.firstName;</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">"innerText = "</span> + divNode.innerText);</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">"innerHTML = "</span> + divNode.innerHTML);</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">"json对象的属性值 = "</span> + jsonStr2.firstName);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">addMyText1</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		<span class="keyword">var</span> div2Node = <span class="built_in">document</span>.getElementById(<span class="string">"div2"</span>);</span><br><span class="line">		div2Node.innerText = <span class="string">"&lt;font color=\"red\"&gt;韦小宝&lt;/font&gt;"</span>;</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">"按钮1,innerText = "</span> + div2Node.innerText);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">addMyText2</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		<span class="keyword">var</span> div3Node = <span class="built_in">document</span>.getElementById(<span class="string">"div3"</span>);</span><br><span class="line">		div3Node.innerHTML = <span class="string">"&lt;font color=\"red\"&gt;杨过&lt;/font&gt;"</span>;</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">"按钮2,innerHTML = "</span> + div3Node.innerHTML);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">getValueByNode</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">"innerText = "</span> + <span class="built_in">document</span>.getElementById(<span class="string">"div2"</span>).innerText);</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">"innerHTML = "</span> + <span class="built_in">document</span>.getElementById(<span class="string">"div3"</span>).innerHTML);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	总结一下：</span></span><br><span class="line"><span class="comment">	innerText 拿到的是浏览器解析执行后的html代码</span></span><br><span class="line"><span class="comment">	innerHTML 拿到的是浏览器解析执行前的html代码</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">	&lt;input type=<span class="string">"button"</span> value=<span class="string">"按钮1-点击我，测试innerText"</span> onclick=<span class="string">"addMyText1()"</span>&gt;</span><br><span class="line">	&lt;input type=<span class="string">"button"</span> value=<span class="string">"按钮2-点击我，测试innerHTML"</span> onclick=<span class="string">"addMyText2()"</span>&gt;</span><br><span class="line">	&lt;input type=<span class="string">"button"</span> value=<span class="string">"按钮3"</span> onclick=<span class="string">"getValueByNode()"</span>&gt;</span><br><span class="line">	&lt;div id=<span class="string">"div2"</span>&gt;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">	&lt;div id="div3"&gt;&lt;/</span>div&gt;</span><br><span class="line">&lt;<span class="regexp">/body&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>html&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+        <hr>
+        <!-- Pager -->
+        <ul class="pager">
+          
+          
+          <li class="next">
+            <a href="/2021/03/01/CSP内容安全策略/" data-toggle="tooltip" data-placement="top" title="CSP内容安全策略">Next Post &rarr;</a>
+          </li>
+          
+        </ul>
+
         
-        <a href="#CTF" title="CTF" rel="3">CTF</a>
+        <!-- tip start -->
+        <div class="tip">
+          <p>
+            If you like this blog or find it useful for you, you are welcome to comment on it. You are also welcome to share this blog, so that more people can participate in it. If the images used in the blog infringe your copyright, please contact the author to delete them. Thank you !
+          </p>
+        </div>
+        <!-- tip end -->
         
-        <a href="#Wifi" title="Wifi" rel="1">Wifi</a>
+
         
-        <a href="#WEB" title="WEB" rel="1">WEB</a>
+        <!-- Sharing Srtart -->
+        <!-- Social Social Share Post -->
+<!-- Docs:https://github.com/overtrue/share.js -->
+
+<div class="social-share" data-initialized="true" data-disabled="tencent ,douban ,qzone ,linkedin ,facebook ,google ,diandian" data-wechat-qrcode-helper="" align="center">
+  <ul class="list-inline text-center social-share-ul">
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-twitter">
+        <i class="fa fa-twitter fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a class="social-share-icon icon-wechat">
+        <i class="fa fa-weixin fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-weibo">
+        <i class="fa fa-weibo fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-qq">
+        <i class="fa fa-qq fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon" href="mailto:?subject=javascript中InnerHtml和InnerText的区别&body=Hi,I found this website and thought you might like it http://yoursite-url/2021/03/02/javascript中InnerHtml和InnerText的区别/">
+        <i class="fa fa-envelope fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<!-- css & js -->
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css"> -->
+<script defer="defer" async="true" src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+        <!-- Sharing End -->
         
-        <a href="#白帽子讲WEB安全" title="白帽子讲WEB安全" rel="1">白帽子讲WEB安全</a>
-        
-        <a href="#JS" title="JS" rel="1">JS</a>
-        
+        <hr>
+
+        <!-- comments start -->
+        <!-- 1. gitalk comment -->
+
+<!-- gitalk start -->
+<!-- Docs:https://github.com/gitalk/gitalk/blob/master/readme-cn.md -->
+
+<div id="gitalk-container"></div>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.js"></script> -->
+<script src="/js/comment/gitalk.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '',
+    clientSecret: '',
+    repo: '',
+    owner: '',
+    admin: '',
+    id: 'Tue Mar 02 2021 21:11:44 GMT+0800', // Ensure uniqueness and length less than 50
+    distractionFreeMode: false, // Facebook-like distraction free mode
+    perPage: 10 ,
+    pagerDirection: 'last',
+    createIssueManually: false ,
+    language: 'zh-CN'
+  });
+  gitalk.render('gitalk-container');
+
+  var gtFolded = () => {
+    setTimeout(function() {
+      let markdownBody = document.getElementsByClassName("markdown-body");
+      let list = Array.from(markdownBody);
+      list.forEach(item => {
+        if (item.clientHeight > 250) {
+          item.classList.add('gt-comment-body-folded');
+          item.style.maxHeight = '250px';
+          item.title = 'Click to Expand';
+          item.onclick = function() {
+            item.classList.remove('gt-comment-body-folded');
+            item.style.maxHeight = '';
+            item.title = '';
+            item.onclick = null;
+          };
+        }
+      })
+    }, 800);
+  }
+</script>
+
+<!-- gitalk end -->
+
+
+
+<!-- 2. gitment comment -->
+
+
+
+<!-- 3. disqus comment -->
+
+
+        <!-- comments end -->
+        <hr>
+
       </div>
 
-      <!-- 标签列表 -->
-      
-      <div class="one-tag-list">
-        <span class="fa fa-tag listing-seperator" id="CTF">
-          <span class="tag-text">CTF</span>
-        </span>
-        
-        <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-        <div class="post-preview">
-          <a href="/2021/02/28/Hgame-Week2-Web-Liki的生日礼物/">
-            <h2 class="post-title">
-              Hgme-Week2-Web-Liki的生日礼物
-            </h2>
-            
-            <h3 class="post-subtitle">
-              WP
-            </h3>
-            
-          </a>
-          <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-        </div>
-        <hr>
-        
-        <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-        <div class="post-preview">
-          <a href="/2021/02/28/Hgame-Week2-Web-200OK/">
-            <h2 class="post-title">
-              Hgme-Week2-Web-200OK!
-            </h2>
-            
-            <h3 class="post-subtitle">
-              CTF
-            </h3>
-            
-          </a>
-          <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-        </div>
-        <hr>
-        
-        <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-        <div class="post-preview">
-          <a href="/2021/02/28/Hgame-Week2-Web-forgetful/">
-            <h2 class="post-title">
-              Hgame-Week2-Web-forgetful
-            </h2>
-            
-            <h3 class="post-subtitle">
-              CTF
-            </h3>
-            
-          </a>
-          <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-        </div>
-        <hr>
-        
-      </div>
-      
-      <div class="one-tag-list">
-        <span class="fa fa-tag listing-seperator" id="Wifi">
-          <span class="tag-text">Wifi</span>
-        </span>
-        
-        <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-        <div class="post-preview">
-          <a href="/2021/02/26/aircrack-ng破解wifi/">
-            <h2 class="post-title">
-              aircrack-ng破解wifi
-            </h2>
-            
-            <h3 class="post-subtitle">
-              A succinct hexo theme...
-            </h3>
-            
-          </a>
-          <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-        </div>
-        <hr>
-        
-      </div>
-      
-      <div class="one-tag-list">
-        <span class="fa fa-tag listing-seperator" id="WEB">
-          <span class="tag-text">WEB</span>
-        </span>
-        
-        <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-        <div class="post-preview">
-          <a href="/2021/02/28/跨站脚本攻击XSS的学习/">
-            <h2 class="post-title">
-              跨站脚本攻击XSS的学习
-            </h2>
-            
-            <h3 class="post-subtitle">
-              白帽子讲WEB安全
-            </h3>
-            
-          </a>
-          <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-        </div>
-        <hr>
-        
-      </div>
-      
-      <div class="one-tag-list">
-        <span class="fa fa-tag listing-seperator" id="白帽子讲WEB安全">
-          <span class="tag-text">白帽子讲WEB安全</span>
-        </span>
-        
-        <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-        <div class="post-preview">
-          <a href="/2021/02/28/跨站脚本攻击XSS的学习/">
-            <h2 class="post-title">
-              跨站脚本攻击XSS的学习
-            </h2>
-            
-            <h3 class="post-subtitle">
-              白帽子讲WEB安全
-            </h3>
-            
-          </a>
-          <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-        </div>
-        <hr>
-        
-      </div>
-      
-      <div class="one-tag-list">
-        <span class="fa fa-tag listing-seperator" id="JS">
-          <span class="tag-text">JS</span>
-        </span>
-        
-        <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-        <div class="post-preview">
-          <a href="/2021/03/02/javascript中InnerHtml和InnerText的区别/">
-            <h2 class="post-title">
-              javascript中InnerHtml和InnerText的区别
-            </h2>
-            
-            <h3 class="post-subtitle">
-              JS
-            </h3>
-            
-          </a>
-          <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-        </div>
-        <hr>
-        
-      </div>
-      
+      <!-- Catalog: Tabe of Content -->
+      <!-- Table of Contents -->
 
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="nav">none</ol>
+        
+        </div>
+      </aside>
+    
+
+
+      <!-- Sidebar Container -->
+      <div class="
+                col-lg-8 col-lg-offset-1
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+        <!-- Featured Tags -->
+        
+        <section>
+          <!-- no hr -->
+          <h5>
+            <a href="/tags/">FEATURED TAGS</a>
+          </h5>
+          <div class="tags">
+            
+            <a class="tag" href="/tags/#JS" title="JS">JS</a>
+            
+          </div>
+        </section>
+        
+
+        <!-- Friends Blog -->
+        
+        <hr>
+        <h5>FRIENDS</h5>
+        <ul class="list-inline">
+
+          
+          <li>
+            <a href="http://poilzero.sipc115.club/" target="_blank">poilzero</a>
+          </li>
+          
+          <li>
+            <a href="https://www.515code.com/" target="_blank">铭大佬</a>
+          </li>
+          
+          <li>
+            <a href="http://www.xcy1010.cn/" target="_blank">徐晨阳</a>
+          </li>
+          
+          <li>
+            <a href="http://derait.sipc115.club/" target="_blank">陈泓盛</a>
+          </li>
+          
+        </ul>
+        
+      </div>
     </div>
   </div>
-</div>
+</article>
+
+
+
+<!-- anchorjs start -->
+<!-- async load function -->
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script type="text/javascript">
+  // async load function
+  function async (u, c) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) {
+      o.addEventListener('load', function(e) {
+        c(null, e);
+      }, false);
+    }
+    s.parentNode.insertBefore(o, s);
+  };
+</script>
+<script type="text/javascript">
+  //anchor-js, Doc:http://bryanbraun.github.io/anchorjs/
+  async ("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js", function() {
+    anchors.options = {
+      visible: 'hover',
+      placement: 'left',
+      // icon: 'ℬ'
+      icon: '❡'
+    };
+    anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+  });
+</script>
+<style>
+  /* place left on bigger screen */
+  @media all and (min-width: 800px) {
+    .anchorjs-link {
+      position: absolute;
+      left: -0.75em;
+      font-size: 1.1em;
+      margin-top: -0.1em;
+    }
+  }
+</style>
+
+<!-- anchorjs end -->
+
 
 
 	<!-- Footer (contains ThemeColor、viewer) -->
@@ -679,7 +776,7 @@
     let jsdelivr = "https://cdn.jsdelivr.net/gh/";
     let gh = "urdr-gungnir";
     let ghPages = gh + ".github.io";
-    let pagePath = "tags/index.html";
+    let pagePath = "2021/03/02/javascript中InnerHtml和InnerText的区别/";
     let jsdelivrurl;
     if (pagePath.indexOf("index.html") != -1) {
       jsdelivrurl = jsdelivr + gh + "/" + ghPages;

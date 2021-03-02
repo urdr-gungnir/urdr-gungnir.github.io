@@ -210,14 +210,14 @@
 
           
           <li>
-            <a href="/about/">About</a>
+            <a href="/categories/">Categories</a>
           </li>
           
           
 
           
           <li>
-            <a href="/categories/">Categories</a>
+            <a href="/about/">About</a>
           </li>
           
           
@@ -385,6 +385,75 @@
   
 
 
+  <a href="/2021/03/02/javascript中InnerHtml和InnerText的区别/">
+    <h2 class="post-title">
+      javascript中InnerHtml和InnerText的区别
+    </h2>
+    <h3 class="post-subtitle">
+      JS
+    </h3>
+    <div class="post-content-preview">
+      最近再研究xss方面，今天在做buuctf时，发现一道xss题目，在注入点（至少看起来是注入点。。。。）注入的xss payload全部都反射到html中，但是没有发挥作用，我偶然看到InnerHtml和InnerText的区别，现在看来有可能就是因为输出位置在js中，而源码中又是InnerText,所以导致即使输出到html中了，也并没有起作用，所以在此记录一下两个方法的区别
+jjinne......
+    </div>
+  </a>
+  
+  <p class="post-meta" style="margin: 10px 0;">
+    Posted by gungnir on
+    2021-03-02
+  </p>
+  <div class="tags">
+    
+    <a href="/tags/#JS" title="JS">JS</a>
+    
+  </div>
+  
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+  
+  <!-- top start (article top hot config) -->
+  
+  <!-- top end -->
+  
+
+
+  <a href="/2021/03/01/CSP内容安全策略/">
+    <h2 class="post-title">
+      CSP内容安全策略
+    </h2>
+    <h3 class="post-subtitle">
+      
+    </h3>
+    <div class="post-content-preview">
+      ...
+    </div>
+  </a>
+  
+  <p class="post-meta" style="margin: 10px 0;">
+    Posted by gungnir on
+    2021-03-01
+  </p>
+  <div class="tags">
+    
+  </div>
+  
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+  
+  <!-- top start (article top hot config) -->
+  
+  <!-- top end -->
+  
+
+
   <a href="/2021/02/28/跨站脚本攻击XSS的学习/">
     <h2 class="post-title">
       跨站脚本攻击XSS的学习
@@ -393,7 +462,8 @@
       白帽子讲WEB安全
     </h3>
     <div class="post-content-preview">
-      《白帽子讲web安全》XSS深度学习1.XSS简介分为三种
+      《白帽子讲web安全》XSS深度学习—-连载中
+1.XSS简介分为三种
 
 反射型
 存储型
@@ -402,7 +472,7 @@ DOM based XSS
 2.XSS payload初探2.1窃取cookieXSS payload实际是js脚本（也可以是Flase或者其他客户端的脚本）
 最常见经典的XSS payload就是cookie劫持
 我先是写了个简单的html页面，模拟已经被XSS攻击了，想要去窃取cookie
-但是还没弄明白如何......
+但是还......
     </div>
   </a>
   
@@ -635,6 +705,10 @@ WEP(Wi......
     <a href="/tags/#白帽子讲WEB安全" title="白帽子讲WEB安全" rel="1">白帽子讲WEB安全</a>
     
     
+    
+    <a href="/tags/#JS" title="JS" rel="1">JS</a>
+    
+    
   </div>
 </section>
 
@@ -720,6 +794,14 @@ WEP(Wi......
 <div class="widget">
   <ul>
     
+    <a href="2021/03/02/javascript%E4%B8%ADInnerHtml%E5%92%8CInnerText%E7%9A%84%E5%8C%BA%E5%88%AB/">
+      <li>javascript中InnerHtml和InnerText的区别</li>
+    </a>
+    
+    <a href="2021/03/01/CSP%E5%86%85%E5%AE%B9%E5%AE%89%E5%85%A8%E7%AD%96%E7%95%A5/">
+      <li>CSP内容安全策略</li>
+    </a>
+    
     <a href="2021/02/28/%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BBXSS%E7%9A%84%E5%AD%A6%E4%B9%A0/">
       <li>跨站脚本攻击XSS的学习</li>
     </a>
@@ -730,14 +812,6 @@ WEP(Wi......
     
     <a href="2021/02/28/Hgame-Week2-Web-200OK/">
       <li>Hgme-Week2-Web-200OK!</li>
-    </a>
-    
-    <a href="2021/02/28/Hgame-Week2-Web-Liki%E7%9A%84%E7%94%9F%E6%97%A5%E7%A4%BC%E7%89%A9/">
-      <li>Hgme-Week2-Web-Liki的生日礼物</li>
-    </a>
-    
-    <a href="2021/02/26/aircrack-ng%E7%A0%B4%E8%A7%A3wifi/">
-      <li>aircrack-ng破解wifi</li>
     </a>
     
   </ul>
@@ -769,7 +843,7 @@ WEP(Wi......
     <!-- <h5>ARCHIVES</h5> -->
     <h5><a href="/archives/">ARCHIVES</a></h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="archives/2021/02/">二月 2021</a><span class="archive-list-count">5</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="archives/2021/03/">三月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2021/02/">二月 2021</a><span class="archive-list-count">5</span></li></ul>
     </div>
 
 
@@ -792,6 +866,10 @@ WEP(Wi......
     
     <a href="/categories/#WEB">
       <li>WEB</li>
+    </a>
+    
+    <a href="/categories/#JS">
+      <li>JS</li>
     </a>
     
   </ul>
