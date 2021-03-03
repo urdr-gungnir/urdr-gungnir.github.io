@@ -217,7 +217,7 @@
 
           
           <li>
-            <a href="/tags/">Tags</a>
+            <a href="/archive/">Archives</a>
           </li>
           
           
@@ -231,7 +231,7 @@
 
           
           <li>
-            <a href="/archive/">Archives</a>
+            <a href="/tags/">Tags</a>
           </li>
           
           
@@ -291,7 +291,7 @@
   <style type="text/css">
     header.intro-header {
        /*post*/
-        background-image: url('https://cdn.jsdelivr.net/gh/urdr-gungnir/urdr-gungnir.github.io');
+        background-image: url('https://cdn.jsdelivr.net/gh/urdr-gungnir/urdr-gungnir.github.io/img/header_img/lml_bg.jpg');
       
     }
 
@@ -317,9 +317,13 @@
           <div class="post-heading">
             <div class="tags">
               
+              <a class="tag" href="/tags/#安全" title="安全">安全</a>
+              
+              <a class="tag" href="/tags/#http头" title="http头">http头</a>
+              
             </div>
             <h1>CSP内容安全策略</h1>
-            <h2 class="subheading"></h2>
+            <h2 class="subheading">安全</h2>
             <span class="meta">
               Posted by gungnir on
               2021-03-01
@@ -330,11 +334,11 @@
             <!-- WordCount start -->
             <div class="blank_box"></div>
             <span class="meta">
-              Estimated Reading Time <span class="post-count">1</span> Minutes
+              Estimated Reading Time <span class="post-count">3</span> Minutes
             </span>
             <div class="blank_box"></div>
             <span class="meta">
-              Words <span class="post-count">0</span> In Total
+              Words <span class="post-count">986</span> In Total
             </span>
             <div class="blank_box"></div>
             <!-- WordCount end -->
@@ -396,7 +400,93 @@
       <!-- Post Container -->
       <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
 
-        
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>内容安全策略  (<a href="https://developer.mozilla.org/en-US/docs/Glossary/CSP" target="_blank" rel="noopener">CSP</a>) 是一个额外的安全层，用于检测并削弱某些特定类型的攻击，包括跨站脚本 (<a href="https://developer.mozilla.org/en-US/docs/Glossary/Cross-site_scripting" target="_blank" rel="noopener">XSS</a>) 和数据注入攻击等。无论是数据盗取、网站内容污染还是散发恶意软件，这些攻击都是主要的手段。</p>
+<p>本文详细介绍如何使用 CSP 防止 XSS 攻击。</p>
+<h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><p>CSP 的实质就是白名单制度，开发者明确告诉客户端，哪些外部资源可以加载和执行，等同于提供白名单。它的实现和执行全部由浏览器完成，开发者只需提供配置。</p>
+<p>CSP 大大增强了网页的安全性。攻击者即使发现了漏洞，也没法注入脚本，除非还控制了一台列入了白名单的可信主机。</p>
+<p>两种方法可以启用 CSP。一种是通过 HTTP 头信息的<code>Content-Security-Policy</code>的字段。</p>
+<figure class="highlight csp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Content-Security-Policy</span>: <span class="keyword">script-src</span> <span class="string">'self'</span>; <span class="keyword">object-src</span> <span class="string">'none'</span>;</span><br><span class="line"><span class="keyword">style-src</span> cdn.example.org third-party.org; <span class="keyword">child-src</span> https:</span><br></pre></td></tr></table></figure>
+
+<p>另一种是通过网页的<code>&lt;meta&gt;</code>标签。</p>
+<figure class="highlight csp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta http-equiv="Content-Security-Policy" content="<span class="keyword">default-src</span> <span class="string">'self'</span>; <span class="keyword">img-src</span> https://*; <span class="keyword">child-src</span> <span class="string">'none'</span>;"&gt;</span><br></pre></td></tr></table></figure>
+
+<p>启用后，不符合 CSP 的外部资源就会被阻止加载。</p>
+<h2 id="限制选项"><a href="#限制选项" class="headerlink" title="限制选项"></a>限制选项</h2><p>以下选项限制各类资源的加载。</p>
+<blockquote>
+<ul>
+<li><strong><code>script-src</code></strong>：外部脚本</li>
+<li><strong><code>style-src</code></strong>：样式表</li>
+<li><strong><code>img-src</code></strong>：图像</li>
+<li><strong><code>media-src</code></strong>：媒体文件（音频和视频）</li>
+<li><strong><code>font-src</code></strong>：字体文件</li>
+<li><strong><code>object-src</code></strong>：插件（比如 Flash）</li>
+<li><strong><code>child-src</code></strong>：框架</li>
+<li><strong><code>frame-ancestors</code></strong>：嵌入的外部资源（比如<frame>、<iframe>、<embed>和<applet>）</li>
+<li><strong><code>connect-src</code></strong>：HTTP 连接（通过 XHR、WebSockets、EventSource等）</li>
+<li><strong><code>worker-src</code></strong>：<code>worker</code>脚本</li>
+<li><strong><code>manifest-src</code></strong>：manifest 文件</li>
+</ul>
+</blockquote>
+<ul>
+<li><h3 id="default-src"><a href="#default-src" class="headerlink" title="default-src"></a>default-src</h3><p><code>default-src</code>用来设置上面各个选项的默认值。</p>
+<blockquote>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Content-Security-Policy</span>: default-src 'self'</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>上面代码限制<strong>所有的</strong>外部资源，都只能从当前域名加载。</p>
+<p>如果同时设置某个单项限制（比如<code>font-src</code>）和<code>default-src</code>，前者会覆盖后者，即字体文件会采用<code>font-src</code>的值，其他资源依然采用<code>default-src</code>的值。</p>
+</li>
+<li><p>URL限制</p>
+<ul>
+<li><strong><code>frame-ancestors</code></strong>：限制嵌入框架的网页</li>
+<li><strong><code>base-uri</code></strong>：限制<code>&lt;base#href&gt;</code></li>
+<li><strong><code>form-action</code></strong>：限制<code>&lt;form#action&gt;</code></li>
+</ul>
+</li>
+<li><p>其他一些安全相关的功能，也放在了 CSP 里面。</p>
+<blockquote>
+<ul>
+<li><strong><code>block-all-mixed-content</code></strong>：HTTPS 网页不得加载 HTTP 资源（浏览器已经默认开启）</li>
+<li><strong><code>upgrade-insecure-requests</code></strong>：自动将网页上所有加载外部资源的 HTTP 链接换成 HTTPS 协议</li>
+<li><strong><code>plugin-types</code></strong>：限制可以使用的插件格式</li>
+<li><strong><code>sandbox</code></strong>：浏览器行为的限制，比如不能有弹出窗口等。</li>
+</ul>
+</blockquote>
+</li>
+<li><p>有时，我们不仅希望防止 XSS，还希望记录此类行为。<code>report-uri</code>就用来告诉浏览器，应该把注入行为报告给哪个网址。</p>
+<blockquote>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Content-Security-Policy</span>: default-src 'self'; ...; report-uri /my_amazing_csp_report_parser;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>上面代码指定，将注入行为报告给<code>/my_amazing_csp_report_parser</code>这个 URL。</p>
+</li>
+</ul>
+<h2 id="Content-Security-Policy-Report-Only"><a href="#Content-Security-Policy-Report-Only" class="headerlink" title="Content-Security-Policy-Report-Only"></a>Content-Security-Policy-Report-Only</h2><p>除了<code>Content-Security-Policy</code>，还有一个<code>Content-Security-Policy-Report-Only</code>字段，表示不执行限制选项，只是记录违反限制的行为。</p>
+<p>它必须与<code>report-uri</code>选项配合使用。</p>
+<blockquote>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Content-Security-Policy-Report-Only</span>: default-src 'self'; ...; report-uri /my_amazing_csp_report_parser;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="选项"><a href="#选项" class="headerlink" title="选项"></a>选项</h2><p>每个限制选项可以设置以下几种值，这些值就构成了白名单。</p>
+<blockquote>
+<ul>
+<li>主机名：<code>example.org</code>，<code>https://example.com:443</code></li>
+<li>路径名：<code>example.org/resources/js/</code></li>
+<li>通配符：<code>*.example.org</code>，<code>*://*.example.com:*</code>（表示任意协议、任意子域名、任意端口）</li>
+<li>协议名：<code>https:</code>、<code>data:</code></li>
+<li>关键字<code>&#39;self&#39;</code>：当前域名，需要加引号</li>
+<li>关键字<code>&#39;none&#39;</code>：禁止加载任何外部资源，需要加引号</li>
+</ul>
+</blockquote>
+<p>多个值也可以并列，用空格分隔。</p>
+<blockquote>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Content-Security-Policy</span>: script-src 'self' https://apis.google.com</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>如果同一个限制选项使用多次，只有第一次会生效。</p>
+<blockquote>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 错误的写法</span><br><span class="line">script-src https://host1.com; script-src https://host2.com</span><br><span class="line"></span><br><span class="line"># 正确的写法</span><br><span class="line">script-src https://host1.com https://host2.com</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>如果不设置某个限制选项，就是默认允许任何值。</p>
+<p><strong>参考资料</strong>：<a href="http://www.ruanyifeng.com/blog/2016/09/csp.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2016/09/csp.html</a></p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CSP" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CSP</a></p>
+
 
         <hr>
         <!-- Pager -->
@@ -538,7 +628,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="nav">none</ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#前言"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">前言</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#基本使用"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">基本使用</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#限制选项"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">限制选项</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#default-src"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">default-src</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Content-Security-Policy-Report-Only"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">Content-Security-Policy-Report-Only</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#选项"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">选项</span></a></li></ol>
         
         </div>
       </aside>
@@ -559,6 +649,10 @@
             <a href="/tags/">FEATURED TAGS</a>
           </h5>
           <div class="tags">
+            
+            <a class="tag" href="/tags/#安全" title="安全">安全</a>
+            
+            <a class="tag" href="/tags/#http头" title="http头">http头</a>
             
           </div>
         </section>
