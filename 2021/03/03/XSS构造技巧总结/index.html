@@ -71,12 +71,12 @@
 
   <!-- Pygments Highlight CSS -->
   
-<link rel="stylesheet" href="css/highlight.css">
-<link rel="stylesheet" href="css/widget.css">
-<link rel="stylesheet" href="css/rocket.css">
-<link rel="stylesheet" href="css/signature.css">
-<link rel="stylesheet" href="css/catalog.css">
-<link rel="stylesheet" href="css/livemylife.css">
+<link rel="stylesheet" href="../../../../css/highlight.css">
+<link rel="stylesheet" href="../../../../css/widget.css">
+<link rel="stylesheet" href="../../../../css/rocket.css">
+<link rel="stylesheet" href="../../../../css/signature.css">
+<link rel="stylesheet" href="../../../../css/catalog.css">
+<link rel="stylesheet" href="../../../../css/livemylife.css">
 
 
   
@@ -138,10 +138,10 @@
   <!--[if lt IE 9]> <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script> <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script> <![endif]-->
 
   <!-- ga & ba script hoook -->
-  <link rel="canonical" href="http://yoursite-url/">
+  <link rel="canonical" href="http://yoursite-url/2021/03/03/XSS构造技巧总结/">
   <title>
     
-    gungnir | 九日
+    XSS构造技巧总结 - gungnir | 九日
     
   </title>
 <meta name="generator" content="Hexo 4.2.1"></head>
@@ -290,8 +290,8 @@
   <!-- CDN: jsdelivr start -->
   <style type="text/css">
     header.intro-header {
-       /*config*/
-        background-image: url('https://cdn.jsdelivr.net/gh/urdr-gungnir/urdr-gungnir.github.io/img/header_img/newhome_bg.jpg');
+       /*post*/
+        background-image: url('https://cdn.jsdelivr.net/gh/urdr-gungnir/urdr-gungnir.github.io/img/header_img/lml_bg.jpg');
       
     }
 
@@ -314,10 +314,42 @@
       <div class="row">
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
           
-          <div class="site-heading">
-            <h1>gungnir&#39;s blog</h1>
-            <!--<hr class="small">-->
-            <span class="subheading">just love</span>
+          <div class="post-heading">
+            <div class="tags">
+              
+              <a class="tag" href="/tags/#XSS" title="XSS">XSS</a>
+              
+            </div>
+            <h1>XSS构造技巧总结</h1>
+            <h2 class="subheading">XSS</h2>
+            <span class="meta">
+              Posted by gungnir on
+              2021-03-03
+            </span>
+
+
+            
+            <!-- WordCount start -->
+            <div class="blank_box"></div>
+            <span class="meta">
+              Estimated Reading Time <span class="post-count">1</span> Minutes
+            </span>
+            <div class="blank_box"></div>
+            <span class="meta">
+              Words <span class="post-count">189</span> In Total
+            </span>
+            <div class="blank_box"></div>
+            <!-- WordCount end -->
+            
+            
+            <!-- 不蒜子统计 start -->
+            <span class="meta" id="busuanzi_container_page_pv">
+              Viewed <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span> Times
+            </span>
+            <!-- 不蒜子统计 end -->
+            
+
+
           </div>
           
         </div>
@@ -358,594 +390,265 @@
 	Friends Blog、
 	anchorjs、
 	) -->
-	<!-- Main Content -->
-<div class="container">
-  <div class="row">
-    
-
-    <!-- USE SIDEBAR -->
-    <!-- Post Container -->
-    <div class="
-                col-lg-8 col-lg-offset-1
-                col-md-8 col-md-offset-1
-                col-sm-12
-                col-xs-12
-                post-container
-            ">
-
-      <!-- Main Content -->
-
-
-<div class="post-preview">
-
-  
-  <!-- top start (article top hot config) -->
-  
-  <!-- top end -->
-  
-
-
-  <a href="/2021/03/03/XSS构造技巧总结/">
-    <h2 class="post-title">
-      XSS构造技巧总结
-    </h2>
-    <h3 class="post-subtitle">
-      XSS
-    </h3>
-    <div class="post-content-preview">
-      之前写了《跨站脚本攻击XSS的学习》这篇博客，不过上一篇重点在于从浏览器安全角度去解析xss的攻防，现在这篇文章，是我用来总结CTF也好，普通xss漏洞绕过姿势也好，我用来总结一些构建技巧。
-输出在script标签中如果没有过滤&lt; script&gt;标签，我就没必要说多了，大家都知道，如果过滤了&lt;&gt;或者script，
-可以在xss payload中使用函数，比如eval(......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by gungnir on
-    2021-03-03
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#XSS" title="XSS">XSS</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-  
-  <!-- top start (article top hot config) -->
-  
-  <!-- top end -->
-  
-
-
-  <a href="/2021/03/02/javascript中InnerHtml和InnerText的区别/">
-    <h2 class="post-title">
-      javascript中InnerHtml和InnerText的区别
-    </h2>
-    <h3 class="post-subtitle">
-      JS
-    </h3>
-    <div class="post-content-preview">
-      最近再研究xss方面，今天在做buuctf时，发现一道xss题目，在注入点（至少看起来是注入点。。。。）注入的xss payload全部都反射到html中，但是没有发挥作用，我偶然看到InnerHtml和InnerText的区别，现在看来有可能就是因为输出位置在js中，而源码中又是InnerText,所以导致即使输出到html中了，也并没有起作用，所以在此记录一下两个方法的区别
-jjinne......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by gungnir on
-    2021-03-02
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#JS" title="JS">JS</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-  
-  <!-- top start (article top hot config) -->
-  
-  <!-- top end -->
-  
-
-
-  <a href="/2021/03/01/CSP内容安全策略/">
-    <h2 class="post-title">
-      CSP内容安全策略
-    </h2>
-    <h3 class="post-subtitle">
-      安全
-    </h3>
-    <div class="post-content-preview">
-      前言内容安全策略  (CSP) 是一个额外的安全层，用于检测并削弱某些特定类型的攻击，包括跨站脚本 (XSS) 和数据注入攻击等。无论是数据盗取、网站内容污染还是散发恶意软件，这些攻击都是主要的手段。
-本文详细介绍如何使用 CSP 防止 XSS 攻击。
-基本使用CSP 的实质就是白名单制度，开发者明确告诉客户端，哪些外部资源可以加载和执行，等同于提供白名单。它的实现和执行全部由浏览器完成，开......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by gungnir on
-    2021-03-01
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#安全" title="安全">安全</a>
-    
-    <a href="/tags/#http头" title="http头">http头</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-  
-  <!-- top start (article top hot config) -->
-  
-  <!-- top end -->
-  
-
-
-  <a href="/2021/02/28/跨站脚本攻击XSS的学习/">
-    <h2 class="post-title">
-      跨站脚本攻击XSS的学习
-    </h2>
-    <h3 class="post-subtitle">
-      白帽子讲WEB安全
-    </h3>
-    <div class="post-content-preview">
-      《白帽子讲web安全》XSS深度学习—-连载中
-1.XSS简介分为三种
-
-反射型
-存储型
-DOM based XSS
-
-2.XSS payload初探2.1窃取cookieXSS payload实际是js脚本（也可以是Flase或者其他客户端的脚本）
-最常见经典的XSS payload就是cookie劫持
-我先是写了个简单的html页面，模拟已经被XSS攻击了，想要去窃取cookie
-但是还......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by gungnir on
-    2021-02-28
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#WEB" title="WEB">WEB</a>
-    
-    <a href="/tags/#白帽子讲WEB安全" title="白帽子讲WEB安全">白帽子讲WEB安全</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-  
-  <!-- top start (article top hot config) -->
-  
-  <!-- top end -->
-  
-
-
-  <a href="/2021/02/28/Hgame-Week2-Web-forgetful/">
-    <h2 class="post-title">
-      Hgame-Week2-Web-forgetful
-    </h2>
-    <h3 class="post-subtitle">
-      CTF
-    </h3>
-    <div class="post-content-preview">
-      题解进去看到这道题我就想到了模板注入，一开始试了试xss，是可以的，又试了一下ssti，确实可以，所以这道题直接用基本的ssti注入方法就行，不过我在这里有个坑一直踩，导致我一直没做出来，就是，最后读取文件要用base64加密，要不然读出来是空白的。。。。我在这里卡了很久
-1&#123;% for c in [].__class__.__base__.__subclasses__() %&#......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by gungnir on
-    2021-02-28
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#CTF" title="CTF">CTF</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-  
-  <!-- top start (article top hot config) -->
-  
-  <!-- top end -->
-  
-
-
-  <a href="/2021/02/28/Hgame-Week2-Web-200OK/">
-    <h2 class="post-title">
-      Hgme-Week2-Web-200OK!
-    </h2>
-    <h3 class="post-subtitle">
-      CTF
-    </h3>
-    <div class="post-content-preview">
-      题解题目是sql注入，抓到包后，可以看到status字段是由数据库回显的，所以使用脚本爆破就行，fuzz后可以写出有用的脚本
-这里我自己写了个脚本，但是不如师傅们写的，所以呢，我这里贴出师傅们的脚本
-12345678910111213141516171819202122232425262728293031import requestsimport stringimport res = req......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by gungnir on
-    2021-02-28
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#CTF" title="CTF">CTF</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-  
-  <!-- top start (article top hot config) -->
-  
-  <!-- top end -->
-  
-
-
-  <a href="/2021/02/28/Hgame-Week2-Web-Liki的生日礼物/">
-    <h2 class="post-title">
-      Hgme-Week2-Web-Liki的生日礼物
-    </h2>
-    <h3 class="post-subtitle">
-      WP
-    </h3>
-    <div class="post-content-preview">
-      题记看到这种价格买东西的，无非是条件竞争、汇率转换、整数溢出等等，这里姿势是条件竞争。
-条件竞争
-官方概念是“发生在多个线程同时访问同一个共享代码、变量、文件等没有进行锁操作或者同步操作的场景中。这个漏洞存在于操作系统、数据库、web等多个层面，像有名的脏牛（dirty cow）。
-
-关键在于多线程和同时，如果多线程处理情况不到位，出现异常，就有可能引发这个漏洞。
-在这里漏洞的利用原理是，通......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by gungnir on
-    2021-02-28
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#CTF" title="CTF">CTF</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-  
-  <!-- top start (article top hot config) -->
-  
-  <!-- top end -->
-  
-
-
-  <a href="/2021/02/26/aircrack-ng破解wifi/">
-    <h2 class="post-title">
-      aircrack-ng破解wifi
-    </h2>
-    <h3 class="post-subtitle">
-      A succinct hexo theme...
-    </h3>
-    <div class="post-content-preview">
-      wifi破解学习工具列举kali操作系统、无线网卡、电脑。。。。，还需要有一个wifi破解的字典（这个靠自己）
-知识须知AP(Access Point): 网络接入点，是一种连接无线或有线网络的设备。就是我们俗称的路由器。
-MAC(Media Access Control Address): 相当于网卡的身份证，MAC 地址本身是不能修改，但是可以通过伪造MAC 地址欺骗AP。
-WEP(Wi......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by gungnir on
-    2021-02-26
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#Wifi" title="Wifi">Wifi</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-
-
-  <!-- Pager -->
-  <ul class="pager">
-    
-    
-  </ul>
-
-
-      <!-- 如果开启评论功能 -->
-      
-    </div>
-
-    <!-- Sidebar Container -->
-<div class="
-    col-lg-3 col-lg-offset-0
-    col-md-3 col-md-offset-0
-    col-sm-12
-    col-xs-12
-    sidebar-container
-">
-    
-        <!--   -->
-<h5><a href="/">VISITORS</a></h5>
-
-<div class="widget">
-  <span>
-    Viewed <b><i><span id="busuanzi_value_site_pv"><i class="fa fa-spinner fa-spin"></i></span></i></b> Times
-  </span>
-  <br />
-  <span>
-    <b><i><span id="busuanzi_value_site_uv"><i class="fa fa-spinner fa-spin"></i></span></i></b> Visitors In Total
-  </span>
-</div>
-
-<!--   -->
-
-        <hr>
-    
-        <!-- Featured Tags -->
-
-<section>
-  <!-- no hr -->
-  <h5><a href="/tags/">FEATURED TAGS</a></h5>
-  <div class="tags">
-    
-    
-    <a href="/tags/#安全" title="安全" rel="1">安全</a>
-    
-    
-    
-    <a href="/tags/#http头" title="http头" rel="1">http头</a>
-    
-    
-    
-    <a href="/tags/#CTF" title="CTF" rel="3">CTF</a>
-    
-    
-    
-    <a href="/tags/#XSS" title="XSS" rel="1">XSS</a>
-    
-    
-    
-    <a href="/tags/#Wifi" title="Wifi" rel="1">Wifi</a>
-    
-    
-    
-    <a href="/tags/#JS" title="JS" rel="1">JS</a>
-    
-    
-    
-    <a href="/tags/#WEB" title="WEB" rel="1">WEB</a>
-    
-    
-    
-    <a href="/tags/#白帽子讲WEB安全" title="白帽子讲WEB安全" rel="1">白帽子讲WEB安全</a>
-    
-    
-  </div>
-</section>
-
-
-        <hr>
-    
-        <!-- Short About -->
-<section class="visible-md visible-lg">
-  <h5><a href="/about/">ABOUT ME</a></h5>
-  <div class="short-about">
-
-    
-    <img id="avatar_pic" src="/img/avatar/handsome-girl.jpg" alt="avatar_pic" style="box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, .5);
-    -moz-box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, .5);
-    -webkit-box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, .5);" />
-    
-
-    
-
-    <!-- SNS Link -->
-    <ul class="list-inline">
-      
-
-      
-      <li>
-        <a target="_blank" href="https://github.com/urdr-gungnir">
-          <span class="fa-stack fa-lg">
-            <i class="fa fa-circle fa-stack-2x"></i>
-            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-          </span>
-        </a>
-      </li>
-      
-
-      
-      <li>
-        <a target="_blank" href="https://twitter.com/九日">
-          <span class="fa-stack fa-lg">
-            <i class="fa fa-circle fa-stack-2x"></i>
-            <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
-          </span>
-        </a>
-      </li>
-      
-
-      
-
-      
-      <li>
-        <a target="_blank" href="https://www.facebook.com/gungnir">
-          <span class="fa-stack fa-lg">
-            <i class="fa fa-circle fa-stack-2x"></i>
-            <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
-          </span>
-        </a>
-      </li>
-      
-
-      
-
-      
-      <li>
-        <a target="_blank" href="https://www.zhihu.com/people/九日">
-          <span class="fa-stack fa-lg">
-            <i class="fa fa-circle fa-stack-2x"></i>
-            <i class="fa  fa-stack-1x fa-inverse">知</i>
-          </span>
-        </a>
-      </li>
-      
-
-      
-
-    </ul>
-  </div>
-</section>
-
-        <hr>
-    
-        
-<!-- <h5>RECENT POSTS</h5> -->
-<h5><a href="/">RECENT POSTS</a></h5>
-<div class="widget">
-  <ul>
-    
-    <a href="2021/03/03/XSS%E6%9E%84%E9%80%A0%E6%8A%80%E5%B7%A7%E6%80%BB%E7%BB%93/">
-      <li>XSS构造技巧总结</li>
-    </a>
-    
-    <a href="2021/03/02/javascript%E4%B8%ADInnerHtml%E5%92%8CInnerText%E7%9A%84%E5%8C%BA%E5%88%AB/">
-      <li>javascript中InnerHtml和InnerText的区别</li>
-    </a>
-    
-    <a href="2021/03/01/CSP%E5%86%85%E5%AE%B9%E5%AE%89%E5%85%A8%E7%AD%96%E7%95%A5/">
-      <li>CSP内容安全策略</li>
-    </a>
-    
-    <a href="2021/02/28/%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BBXSS%E7%9A%84%E5%AD%A6%E4%B9%A0/">
-      <li>跨站脚本攻击XSS的学习</li>
-    </a>
-    
-    <a href="2021/02/28/Hgame-Week2-Web-forgetful/">
-      <li>Hgame-Week2-Web-forgetful</li>
-    </a>
-    
-  </ul>
-</div>
-
-
-        <hr>
-    
-        <!-- Friends Blog -->
-
-<!-- <h5>FRIENDS</h5> -->
-<h5><a href="/">FRIENDS</a></h5>
-<ul class="list-inline">
-  
-  <li><a href="http://poilzero.sipc115.club/" target="_blank">poilzero</a></li>
-  
-  <li><a href="https://www.515code.com/" target="_blank">铭大佬</a></li>
-  
-  <li><a href="http://www.xcy1010.cn/" target="_blank">徐晨阳</a></li>
-  
-  <li><a href="http://derait.sipc115.club/" target="_blank">陈泓盛</a></li>
-  
+	<!-- Modify by Yu-Hsuan Yen -->
+<!-- Post Content -->
+<article>
+  <div class="container">
+    <div class="row">
+      <!-- Post Container -->
+      <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
+
+        <p>之前写了《跨站脚本攻击XSS的学习》这篇博客，不过上一篇重点在于从浏览器安全角度去解析xss的攻防，现在这篇文章，是我用来总结CTF也好，普通xss漏洞绕过姿势也好，我用来总结一些构建技巧。</p>
+<h2 id="输出在script标签中"><a href="#输出在script标签中" class="headerlink" title="输出在script标签中"></a>输出在script标签中</h2><p>如果没有过滤&lt; script&gt;标签，我就没必要说多了，大家都知道，如果过滤了&lt;&gt;或者script，</p>
+<p>可以在xss payload中使用函数，比如eval()函数</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">eval</span>(<span class="string">'alert(1)'</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="输出在html属性里的情况"><a href="#输出在html属性里的情况" class="headerlink" title="输出在html属性里的情况"></a>输出在html属性里的情况</h2><ul>
+<li>css中允许使用转义字符，<strong>\ +ascii</strong> 16进制的方法，所以，如果输出点在css中，那么我们可以用这种方法组成payload</li>
 </ul>
 
 
         <hr>
-    
+        <!-- Pager -->
+        <ul class="pager">
+          
+          
+          <li class="next">
+            <a href="/2021/03/02/javascript中InnerHtml和InnerText的区别/" data-toggle="tooltip" data-placement="top" title="javascript中InnerHtml和InnerText的区别">Next Post &rarr;</a>
+          </li>
+          
+        </ul>
+
         
-    <!-- <h5>ARCHIVES</h5> -->
-    <h5><a href="/archives/">ARCHIVES</a></h5>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="archives/2021/03/">三月 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2021/02/">二月 2021</a><span class="archive-list-count">5</span></li></ul>
-    </div>
+        <!-- tip start -->
+        <div class="tip">
+          <p>
+            If you like this blog or find it useful for you, you are welcome to comment on it. You are also welcome to share this blog, so that more people can participate in it. If the images used in the blog infringe your copyright, please contact the author to delete them. Thank you !
+          </p>
+        </div>
+        <!-- tip end -->
+        
 
+        
+        <!-- Sharing Srtart -->
+        <!-- Social Social Share Post -->
+<!-- Docs:https://github.com/overtrue/share.js -->
 
-        <hr>
-    
-        <!-- Categories -->
-
-<!-- <h5>categories</h5> -->
-<h5><a href="/categories/">CATEGORIES</a></h5>
-<div class="widget">
-  <ul>
-    
-    <a href="/categories/#安全">
-      <li>安全</li>
-    </a>
-    
-    <a href="/categories/#CTF">
-      <li>CTF</li>
-    </a>
-    
-    <a href="/categories/#XSS">
-      <li>XSS</li>
-    </a>
-    
-    <a href="/categories/#Wifi">
-      <li>Wifi</li>
-    </a>
-    
-    <a href="/categories/#JS">
-      <li>JS</li>
-    </a>
-    
-    <a href="/categories/#WEB">
-      <li>WEB</li>
-    </a>
-    
+<div class="social-share" data-initialized="true" data-disabled="tencent ,douban ,qzone ,linkedin ,facebook ,google ,diandian" data-wechat-qrcode-helper="" align="center">
+  <ul class="list-inline text-center social-share-ul">
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-twitter">
+        <i class="fa fa-twitter fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a class="social-share-icon icon-wechat">
+        <i class="fa fa-weixin fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-weibo">
+        <i class="fa fa-weibo fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-qq">
+        <i class="fa fa-qq fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon" href="mailto:?subject=XSS构造技巧总结&body=Hi,I found this website and thought you might like it http://yoursite-url/2021/03/03/XSS构造技巧总结/">
+        <i class="fa fa-envelope fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
   </ul>
 </div>
 
+<!-- css & js -->
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css"> -->
+<script defer="defer" async="true" src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
 
+        <!-- Sharing End -->
+        
         <hr>
-    
-</div>
+
+        <!-- comments start -->
+        <!-- 1. gitalk comment -->
+
+<!-- gitalk start -->
+<!-- Docs:https://github.com/gitalk/gitalk/blob/master/readme-cn.md -->
+
+<div id="gitalk-container"></div>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.js"></script> -->
+<script src="/js/comment/gitalk.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '',
+    clientSecret: '',
+    repo: '',
+    owner: '',
+    admin: '',
+    id: 'Wed Mar 03 2021 21:15:57 GMT+0800', // Ensure uniqueness and length less than 50
+    distractionFreeMode: false, // Facebook-like distraction free mode
+    perPage: 10 ,
+    pagerDirection: 'last',
+    createIssueManually: false ,
+    language: 'zh-CN'
+  });
+  gitalk.render('gitalk-container');
+
+  var gtFolded = () => {
+    setTimeout(function() {
+      let markdownBody = document.getElementsByClassName("markdown-body");
+      let list = Array.from(markdownBody);
+      list.forEach(item => {
+        if (item.clientHeight > 250) {
+          item.classList.add('gt-comment-body-folded');
+          item.style.maxHeight = '250px';
+          item.title = 'Click to Expand';
+          item.onclick = function() {
+            item.classList.remove('gt-comment-body-folded');
+            item.style.maxHeight = '';
+            item.title = '';
+            item.onclick = null;
+          };
+        }
+      })
+    }, 800);
+  }
+</script>
+
+<!-- gitalk end -->
+
+
+
+<!-- 2. gitment comment -->
+
+
+
+<!-- 3. disqus comment -->
+
+
+        <!-- comments end -->
+        <hr>
+
+      </div>
+
+      <!-- Catalog: Tabe of Content -->
+      <!-- Table of Contents -->
 
     
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#输出在script标签中"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">输出在script标签中</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#输出在html属性里的情况"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">输出在html属性里的情况</span></a></li></ol>
+        
+        </div>
+      </aside>
+    
+
+
+      <!-- Sidebar Container -->
+      <div class="
+                col-lg-8 col-lg-offset-1
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+        <!-- Featured Tags -->
+        
+        <section>
+          <!-- no hr -->
+          <h5>
+            <a href="/tags/">FEATURED TAGS</a>
+          </h5>
+          <div class="tags">
+            
+            <a class="tag" href="/tags/#XSS" title="XSS">XSS</a>
+            
+          </div>
+        </section>
+        
+
+        <!-- Friends Blog -->
+        
+        <hr>
+        <h5>FRIENDS</h5>
+        <ul class="list-inline">
+
+          
+          <li>
+            <a href="http://poilzero.sipc115.club/" target="_blank">poilzero</a>
+          </li>
+          
+          <li>
+            <a href="https://www.515code.com/" target="_blank">铭大佬</a>
+          </li>
+          
+          <li>
+            <a href="http://www.xcy1010.cn/" target="_blank">徐晨阳</a>
+          </li>
+          
+          <li>
+            <a href="http://derait.sipc115.club/" target="_blank">陈泓盛</a>
+          </li>
+          
+        </ul>
+        
+      </div>
+    </div>
   </div>
-</div>
+</article>
+
+
+
+<!-- anchorjs start -->
+<!-- async load function -->
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script type="text/javascript">
+  // async load function
+  function async (u, c) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) {
+      o.addEventListener('load', function(e) {
+        c(null, e);
+      }, false);
+    }
+    s.parentNode.insertBefore(o, s);
+  };
+</script>
+<script type="text/javascript">
+  //anchor-js, Doc:http://bryanbraun.github.io/anchorjs/
+  async ("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js", function() {
+    anchors.options = {
+      visible: 'hover',
+      placement: 'left',
+      // icon: 'ℬ'
+      icon: '❡'
+    };
+    anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+  });
+</script>
+<style>
+  /* place left on bigger screen */
+  @media all and (min-width: 800px) {
+    .anchorjs-link {
+      position: absolute;
+      left: -0.75em;
+      font-size: 1.1em;
+      margin-top: -0.1em;
+    }
+  }
+</style>
+
+<!-- anchorjs end -->
+
 
 
 	<!-- Footer (contains ThemeColor、viewer) -->
@@ -1074,7 +777,7 @@ WEP(Wi......
     let jsdelivr = "https://cdn.jsdelivr.net/gh/";
     let gh = "urdr-gungnir";
     let ghPages = gh + ".github.io";
-    let pagePath = "index.html";
+    let pagePath = "2021/03/03/XSS构造技巧总结/";
     let jsdelivrurl;
     if (pagePath.indexOf("index.html") != -1) {
       jsdelivrurl = jsdelivr + gh + "/" + ghPages;

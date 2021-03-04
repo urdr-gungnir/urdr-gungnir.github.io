@@ -71,12 +71,12 @@
 
   <!-- Pygments Highlight CSS -->
   
-<link rel="stylesheet" href="css/highlight.css">
-<link rel="stylesheet" href="css/widget.css">
-<link rel="stylesheet" href="css/rocket.css">
-<link rel="stylesheet" href="css/signature.css">
-<link rel="stylesheet" href="css/catalog.css">
-<link rel="stylesheet" href="css/livemylife.css">
+<link rel="stylesheet" href="../../css/highlight.css">
+<link rel="stylesheet" href="../../css/widget.css">
+<link rel="stylesheet" href="../../css/rocket.css">
+<link rel="stylesheet" href="../../css/signature.css">
+<link rel="stylesheet" href="../../css/catalog.css">
+<link rel="stylesheet" href="../../css/livemylife.css">
 
 
   
@@ -138,7 +138,7 @@
   <!--[if lt IE 9]> <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script> <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script> <![endif]-->
 
   <!-- ga & ba script hoook -->
-  <link rel="canonical" href="http://yoursite-url/">
+  <link rel="canonical" href="http://yoursite-url/tags/XSS/">
   <title>
     
     gungnir | 九日
@@ -290,8 +290,8 @@
   <!-- CDN: jsdelivr start -->
   <style type="text/css">
     header.intro-header {
-       /*config*/
-        background-image: url('https://cdn.jsdelivr.net/gh/urdr-gungnir/urdr-gungnir.github.io/img/header_img/newhome_bg.jpg');
+       /*page*/
+        background-image: url('https://cdn.jsdelivr.net/gh/urdr-gungnir/urdr-gungnir.github.io/img/header_img/archive_bg2.jpg');
       
     }
 
@@ -373,326 +373,152 @@
                 post-container
             ">
 
-      <!-- Main Content -->
+      
+<!-- Main Content -->
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-0 col-md-10 col-md-offset-1">
+      <!-- 归档列表 -->
+
+      
+
+      <!-- 归档列表 -->
+
+      
+      <div class="one-tag-list">
+        <span class="fa fa-calendar-times-o listing-seperator" id="2021">
+          <span class="tag-text">2021</span>
+        </span>
+        <ul>
+          
+          <!-- <li class="listing-item">
+                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+                  </li> -->
+          <li>
+            03-03
+            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+            <a href="/2021/03/03/XSS构造技巧总结/" style="color: #0085a1">
+              <span>
+                XSS构造技巧总结
+              </span>
+            </a>
+            <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+          </li>
+          
+          <!-- <li class="listing-item">
+                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+                  </li> -->
+          <li>
+            03-02
+            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+            <a href="/2021/03/02/javascript中InnerHtml和InnerText的区别/" style="color: #0085a1">
+              <span>
+                javascript中InnerHtml和InnerText的区别
+              </span>
+            </a>
+            <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+          </li>
+          
+          <!-- <li class="listing-item">
+                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+                  </li> -->
+          <li>
+            03-01
+            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+            <a href="/2021/03/01/CSP内容安全策略/" style="color: #0085a1">
+              <span>
+                CSP内容安全策略
+              </span>
+            </a>
+            <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+          </li>
+          
+          <!-- <li class="listing-item">
+                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+                  </li> -->
+          <li>
+            02-28
+            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+            <a href="/2021/02/28/跨站脚本攻击XSS的学习/" style="color: #0085a1">
+              <span>
+                跨站脚本攻击XSS的学习
+              </span>
+            </a>
+            <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+          </li>
+          
+          <!-- <li class="listing-item">
+                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+                  </li> -->
+          <li>
+            02-28
+            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+            <a href="/2021/02/28/Hgame-Week2-Web-forgetful/" style="color: #0085a1">
+              <span>
+                Hgame-Week2-Web-forgetful
+              </span>
+            </a>
+            <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+          </li>
+          
+          <!-- <li class="listing-item">
+                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+                  </li> -->
+          <li>
+            02-28
+            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+            <a href="/2021/02/28/Hgame-Week2-Web-200OK/" style="color: #0085a1">
+              <span>
+                Hgme-Week2-Web-200OK!
+              </span>
+            </a>
+            <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+          </li>
+          
+          <!-- <li class="listing-item">
+                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+                  </li> -->
+          <li>
+            02-28
+            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+            <a href="/2021/02/28/Hgame-Week2-Web-Liki的生日礼物/" style="color: #0085a1">
+              <span>
+                Hgme-Week2-Web-Liki的生日礼物
+              </span>
+            </a>
+            <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+          </li>
+          
+          <!-- <li class="listing-item">
+                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+                  </li> -->
+          <li>
+            02-26
+            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+            <a href="/2021/02/26/aircrack-ng破解wifi/" style="color: #0085a1">
+              <span>
+                aircrack-ng破解wifi
+              </span>
+            </a>
+            <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+          </li>
+          
+        </ul>
+      </div>
+      
 
 
-<div class="post-preview">
-
-  
-  <!-- top start (article top hot config) -->
-  
-  <!-- top end -->
-  
-
-
-  <a href="/2021/03/03/XSS构造技巧总结/">
-    <h2 class="post-title">
-      XSS构造技巧总结
-    </h2>
-    <h3 class="post-subtitle">
-      XSS
-    </h3>
-    <div class="post-content-preview">
-      之前写了《跨站脚本攻击XSS的学习》这篇博客，不过上一篇重点在于从浏览器安全角度去解析xss的攻防，现在这篇文章，是我用来总结CTF也好，普通xss漏洞绕过姿势也好，我用来总结一些构建技巧。
-输出在script标签中如果没有过滤&lt; script&gt;标签，我就没必要说多了，大家都知道，如果过滤了&lt;&gt;或者script，
-可以在xss payload中使用函数，比如eval(......
     </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by gungnir on
-    2021-03-03
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#XSS" title="XSS">XSS</a>
-    
   </div>
-  
-
 </div>
-<hr>
-
-<div class="post-preview">
-
-  
-  <!-- top start (article top hot config) -->
-  
-  <!-- top end -->
-  
-
-
-  <a href="/2021/03/02/javascript中InnerHtml和InnerText的区别/">
-    <h2 class="post-title">
-      javascript中InnerHtml和InnerText的区别
-    </h2>
-    <h3 class="post-subtitle">
-      JS
-    </h3>
-    <div class="post-content-preview">
-      最近再研究xss方面，今天在做buuctf时，发现一道xss题目，在注入点（至少看起来是注入点。。。。）注入的xss payload全部都反射到html中，但是没有发挥作用，我偶然看到InnerHtml和InnerText的区别，现在看来有可能就是因为输出位置在js中，而源码中又是InnerText,所以导致即使输出到html中了，也并没有起作用，所以在此记录一下两个方法的区别
-jjinne......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by gungnir on
-    2021-03-02
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#JS" title="JS">JS</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-  
-  <!-- top start (article top hot config) -->
-  
-  <!-- top end -->
-  
-
-
-  <a href="/2021/03/01/CSP内容安全策略/">
-    <h2 class="post-title">
-      CSP内容安全策略
-    </h2>
-    <h3 class="post-subtitle">
-      安全
-    </h3>
-    <div class="post-content-preview">
-      前言内容安全策略  (CSP) 是一个额外的安全层，用于检测并削弱某些特定类型的攻击，包括跨站脚本 (XSS) 和数据注入攻击等。无论是数据盗取、网站内容污染还是散发恶意软件，这些攻击都是主要的手段。
-本文详细介绍如何使用 CSP 防止 XSS 攻击。
-基本使用CSP 的实质就是白名单制度，开发者明确告诉客户端，哪些外部资源可以加载和执行，等同于提供白名单。它的实现和执行全部由浏览器完成，开......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by gungnir on
-    2021-03-01
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#安全" title="安全">安全</a>
-    
-    <a href="/tags/#http头" title="http头">http头</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-  
-  <!-- top start (article top hot config) -->
-  
-  <!-- top end -->
-  
-
-
-  <a href="/2021/02/28/跨站脚本攻击XSS的学习/">
-    <h2 class="post-title">
-      跨站脚本攻击XSS的学习
-    </h2>
-    <h3 class="post-subtitle">
-      白帽子讲WEB安全
-    </h3>
-    <div class="post-content-preview">
-      《白帽子讲web安全》XSS深度学习—-连载中
-1.XSS简介分为三种
-
-反射型
-存储型
-DOM based XSS
-
-2.XSS payload初探2.1窃取cookieXSS payload实际是js脚本（也可以是Flase或者其他客户端的脚本）
-最常见经典的XSS payload就是cookie劫持
-我先是写了个简单的html页面，模拟已经被XSS攻击了，想要去窃取cookie
-但是还......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by gungnir on
-    2021-02-28
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#WEB" title="WEB">WEB</a>
-    
-    <a href="/tags/#白帽子讲WEB安全" title="白帽子讲WEB安全">白帽子讲WEB安全</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-  
-  <!-- top start (article top hot config) -->
-  
-  <!-- top end -->
-  
-
-
-  <a href="/2021/02/28/Hgame-Week2-Web-forgetful/">
-    <h2 class="post-title">
-      Hgame-Week2-Web-forgetful
-    </h2>
-    <h3 class="post-subtitle">
-      CTF
-    </h3>
-    <div class="post-content-preview">
-      题解进去看到这道题我就想到了模板注入，一开始试了试xss，是可以的，又试了一下ssti，确实可以，所以这道题直接用基本的ssti注入方法就行，不过我在这里有个坑一直踩，导致我一直没做出来，就是，最后读取文件要用base64加密，要不然读出来是空白的。。。。我在这里卡了很久
-1&#123;% for c in [].__class__.__base__.__subclasses__() %&#......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by gungnir on
-    2021-02-28
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#CTF" title="CTF">CTF</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-  
-  <!-- top start (article top hot config) -->
-  
-  <!-- top end -->
-  
-
-
-  <a href="/2021/02/28/Hgame-Week2-Web-200OK/">
-    <h2 class="post-title">
-      Hgme-Week2-Web-200OK!
-    </h2>
-    <h3 class="post-subtitle">
-      CTF
-    </h3>
-    <div class="post-content-preview">
-      题解题目是sql注入，抓到包后，可以看到status字段是由数据库回显的，所以使用脚本爆破就行，fuzz后可以写出有用的脚本
-这里我自己写了个脚本，但是不如师傅们写的，所以呢，我这里贴出师傅们的脚本
-12345678910111213141516171819202122232425262728293031import requestsimport stringimport res = req......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by gungnir on
-    2021-02-28
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#CTF" title="CTF">CTF</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-  
-  <!-- top start (article top hot config) -->
-  
-  <!-- top end -->
-  
-
-
-  <a href="/2021/02/28/Hgame-Week2-Web-Liki的生日礼物/">
-    <h2 class="post-title">
-      Hgme-Week2-Web-Liki的生日礼物
-    </h2>
-    <h3 class="post-subtitle">
-      WP
-    </h3>
-    <div class="post-content-preview">
-      题记看到这种价格买东西的，无非是条件竞争、汇率转换、整数溢出等等，这里姿势是条件竞争。
-条件竞争
-官方概念是“发生在多个线程同时访问同一个共享代码、变量、文件等没有进行锁操作或者同步操作的场景中。这个漏洞存在于操作系统、数据库、web等多个层面，像有名的脏牛（dirty cow）。
-
-关键在于多线程和同时，如果多线程处理情况不到位，出现异常，就有可能引发这个漏洞。
-在这里漏洞的利用原理是，通......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by gungnir on
-    2021-02-28
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#CTF" title="CTF">CTF</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-  
-  <!-- top start (article top hot config) -->
-  
-  <!-- top end -->
-  
-
-
-  <a href="/2021/02/26/aircrack-ng破解wifi/">
-    <h2 class="post-title">
-      aircrack-ng破解wifi
-    </h2>
-    <h3 class="post-subtitle">
-      A succinct hexo theme...
-    </h3>
-    <div class="post-content-preview">
-      wifi破解学习工具列举kali操作系统、无线网卡、电脑。。。。，还需要有一个wifi破解的字典（这个靠自己）
-知识须知AP(Access Point): 网络接入点，是一种连接无线或有线网络的设备。就是我们俗称的路由器。
-MAC(Media Access Control Address): 相当于网卡的身份证，MAC 地址本身是不能修改，但是可以通过伪造MAC 地址欺骗AP。
-WEP(Wi......
-    </div>
-  </a>
-  
-  <p class="post-meta" style="margin: 10px 0;">
-    Posted by gungnir on
-    2021-02-26
-  </p>
-  <div class="tags">
-    
-    <a href="/tags/#Wifi" title="Wifi">Wifi</a>
-    
-  </div>
-  
-
-</div>
-<hr>
-
-
-
-  <!-- Pager -->
-  <ul class="pager">
-    
-    
-  </ul>
 
 
       <!-- 如果开启评论功能 -->
@@ -849,23 +675,23 @@ WEP(Wi......
 <div class="widget">
   <ul>
     
-    <a href="2021/03/03/XSS%E6%9E%84%E9%80%A0%E6%8A%80%E5%B7%A7%E6%80%BB%E7%BB%93/">
+    <a href="../../2021/03/03/XSS%E6%9E%84%E9%80%A0%E6%8A%80%E5%B7%A7%E6%80%BB%E7%BB%93/">
       <li>XSS构造技巧总结</li>
     </a>
     
-    <a href="2021/03/02/javascript%E4%B8%ADInnerHtml%E5%92%8CInnerText%E7%9A%84%E5%8C%BA%E5%88%AB/">
+    <a href="../../2021/03/02/javascript%E4%B8%ADInnerHtml%E5%92%8CInnerText%E7%9A%84%E5%8C%BA%E5%88%AB/">
       <li>javascript中InnerHtml和InnerText的区别</li>
     </a>
     
-    <a href="2021/03/01/CSP%E5%86%85%E5%AE%B9%E5%AE%89%E5%85%A8%E7%AD%96%E7%95%A5/">
+    <a href="../../2021/03/01/CSP%E5%86%85%E5%AE%B9%E5%AE%89%E5%85%A8%E7%AD%96%E7%95%A5/">
       <li>CSP内容安全策略</li>
     </a>
     
-    <a href="2021/02/28/%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BBXSS%E7%9A%84%E5%AD%A6%E4%B9%A0/">
+    <a href="../../2021/02/28/%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC%E6%94%BB%E5%87%BBXSS%E7%9A%84%E5%AD%A6%E4%B9%A0/">
       <li>跨站脚本攻击XSS的学习</li>
     </a>
     
-    <a href="2021/02/28/Hgame-Week2-Web-forgetful/">
+    <a href="../../2021/02/28/Hgame-Week2-Web-forgetful/">
       <li>Hgame-Week2-Web-forgetful</li>
     </a>
     
@@ -898,7 +724,7 @@ WEP(Wi......
     <!-- <h5>ARCHIVES</h5> -->
     <h5><a href="/archives/">ARCHIVES</a></h5>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="archives/2021/03/">三月 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="archives/2021/02/">二月 2021</a><span class="archive-list-count">5</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2021/03/">三月 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2021/02/">二月 2021</a><span class="archive-list-count">5</span></li></ul>
     </div>
 
 
@@ -1074,7 +900,7 @@ WEP(Wi......
     let jsdelivr = "https://cdn.jsdelivr.net/gh/";
     let gh = "urdr-gungnir";
     let ghPages = gh + ".github.io";
-    let pagePath = "index.html";
+    let pagePath = "tags/XSS/index.html";
     let jsdelivrurl;
     if (pagePath.indexOf("index.html") != -1) {
       jsdelivrurl = jsdelivr + gh + "/" + ghPages;
