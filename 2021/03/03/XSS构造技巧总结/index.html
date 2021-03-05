@@ -210,14 +210,14 @@
 
           
           <li>
-            <a href="/about/">About</a>
+            <a href="/archive/">Archives</a>
           </li>
           
           
 
           
           <li>
-            <a href="/archive/">Archives</a>
+            <a href="/about/">About</a>
           </li>
           
           
@@ -332,11 +332,11 @@
             <!-- WordCount start -->
             <div class="blank_box"></div>
             <span class="meta">
-              Estimated Reading Time <span class="post-count">2</span> Minutes
+              Estimated Reading Time <span class="post-count">5</span> Minutes
             </span>
             <div class="blank_box"></div>
             <span class="meta">
-              Words <span class="post-count">576</span> In Total
+              Words <span class="post-count">1.2k</span> In Total
             </span>
             <div class="blank_box"></div>
             <!-- WordCount end -->
@@ -430,7 +430,90 @@
 <p><strong>补充</strong>：在url中%00表示空字符，如果有人用正则表达式来过滤，那么可以用%00绕过</p>
 </li>
 </ul>
-<h2 id="宽字节注入"><a href="#宽字节注入" class="headerlink" title="宽字节注入"></a>宽字节注入</h2><p>​    </p>
+<h2 id="反斜线注入"><a href="#反斜线注入" class="headerlink" title="反斜线注入"></a>反斜线注入</h2><p>反斜线可以将字符转义，所以如果输入之后，被双引号圈住，那么可以用反斜号\转义后面的字符比如双引号或者单引号，这个和sql注入中的一个绕过很像</p>
+<p><strong>注意</strong>：在JavaScript中有个特性，凡以function xxx(){},出现的形式会优先解析</p>
+<pre><code>## DOM xss注入</code></pre><p>js代码中可以用unicode编码，在从js代码输出的会自动解码</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="function">   -&gt;</span>&gt; <span class="string">\u003c或\x3c</span></span><br><span class="line">&gt;<span class="function">   -&gt;</span>&gt; <span class="string">\u003e或\x3e</span></span><br><span class="line"><span class="string">\</span> <span class="function">   -&gt;</span>&gt;<span class="string">\u0020</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="DOM"><a href="#DOM" class="headerlink" title="DOM"></a>DOM</h2><p>DOM xss就是js代码</p>
+<p>比如</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">document.getElementById(<span class="string">"y"</span>).innerHTML=<span class="string">"xxxxxxxxxx"</span><span class="comment">; </span></span><br><span class="line">document.write(<span class="string">"xxxxxxxxxxxx"</span>)<span class="comment">;</span></span><br></pre></td></tr></table></figure>
+
+<p>还有一些网站，使用了第三方的 JS 库，譬如 jQuery 时，会有</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">"#y"</span>).html(<span class="string">"xxxxxxx"</span>);</span><br></pre></td></tr></table></figure>
+
+<p>\14. 当然最后，还需要提到一些需要注意的地方。</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">aa.innerHTML</span>=<span class="string">"xxxxxxxxxxxx"</span><span class="comment">;</span></span><br></pre></td></tr></table></figure>
+
+<p>这种情况下。xxxxx 只能使用 <code>&lt;img src=1 onerror=alert(1)&gt;</code> 这种方式来触发 JS。</p>
+<p>而不能以 <code>&lt;script&gt;alert(1)&lt;/script&gt;</code> 来触发，因为这种压根不会执行<code>&lt;script&gt;..&lt;/script&gt;</code>之间的内容。 IE 下，可以使用</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">defer</span>&gt;</span>alert(1)<span class="tag">&lt;/<span class="name">script</span>&gt;</span>。</span><br></pre></td></tr></table></figure>
+
+<h2 id="iframe标签"><a href="#iframe标签" class="headerlink" title="iframe标签"></a>iframe标签</h2><p>1.1 最好懂的，onload 执行 js</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">onload</span>=<span class="string">"alert(1)"</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>1.2 src 执行 javascript 代码</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">src</span>=<span class="string">"javascript:alert(1)"</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>\3. IE 下 vbscript 执行代码</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">src</span>=<span class="string">"vbscript:msgbox(1)"</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>1.4 Chrome 下 data 协议执行代码</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">src</span>=<span class="string">"data:text/html,&lt;script&gt;alert(1)&lt;/script&gt;"</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span> Chrome</span><br></pre></td></tr></table></figure>
+
+<p>1.5 上面的变体</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">src</span>=<span class="string">"data:text/html,&lt;script&gt;alert(1)&lt;/script&gt;"</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>1.6 Chrome 下 srcdoc 属性</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">srcdoc</span>=<span class="string">"&lt;script&gt;alert(1)&lt;/script&gt;"</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="事件绕过"><a href="#事件绕过" class="headerlink" title="事件绕过"></a>事件绕过</h2><p>当注入点在标签里面的时候，几乎尖括号都是被过滤的，那么怎么绕过，可以使用js中的事件来绕过</p>
+<table>
+<thead>
+<tr>
+<th align="left">事件</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">onchange</td>
+<td align="left">HTML 元素改变</td>
+</tr>
+<tr>
+<td align="left">onfocus</td>
+<td align="left">当输入框获取焦点时，修改背景色（background-color属性） 将被触发。</td>
+</tr>
+<tr>
+<td align="left">Autofocus</td>
+<td align="left">input标签的属性，当页面加载input标签，自动获得焦点。（和onfocus一起用可以xss）</td>
+</tr>
+<tr>
+<td align="left">onclick</td>
+<td align="left">用户点击 HTML 元素</td>
+</tr>
+<tr>
+<td align="left">onmouseover</td>
+<td align="left">用户在一个HTML元素上移动鼠标</td>
+</tr>
+<tr>
+<td align="left">onmouseout</td>
+<td align="left">用户从一个HTML元素上移开鼠标</td>
+</tr>
+<tr>
+<td align="left">onkeydown</td>
+<td align="left">用户按下键盘按键</td>
+</tr>
+<tr>
+<td align="left">onload</td>
+<td align="left">浏览器已完成页面的加载</td>
+</tr>
+</tbody></table>
+<p>在他们后面加上xss payload，就可以实现xss</p>
+<h2 id="标签"><a href="#标签" class="headerlink" title="标签"></a>标签</h2><p>包括一大类iframe</p>
+<p>还有</p>
+<p>a标签 href</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;a <span class="attribute">href</span>=<span class="string">"javascript:alert(1)"</span>&gt;</span><br></pre></td></tr></table></figure>
+
 
 
         <hr>
@@ -569,7 +652,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#输出在script标签中"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">输出在script标签中</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#输出在html属性里的情况"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">输出在html属性里的情况</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#宽字节注入"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">宽字节注入</span></a></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#输出在script标签中"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">输出在script标签中</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#输出在html属性里的情况"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">输出在html属性里的情况</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#反斜线注入"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">反斜线注入</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#DOM"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">DOM</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#iframe标签"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">iframe标签</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#事件绕过"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">事件绕过</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#标签"><span class="toc-nav-number">7.</span> <span class="toc-nav-text">标签</span></a></li></ol>
         
         </div>
       </aside>
