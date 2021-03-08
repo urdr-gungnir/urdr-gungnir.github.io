@@ -210,14 +210,14 @@
 
           
           <li>
-            <a href="/archive/">Archives</a>
+            <a href="/about/">About</a>
           </li>
           
           
 
           
           <li>
-            <a href="/about/">About</a>
+            <a href="/archive/">Archives</a>
           </li>
           
           
@@ -502,7 +502,7 @@
 <p>所以我fuzz了一下，发现常用的基本都被过滤了，而且，最重要的是闭合的符号都被过滤了</p>
 <p>百思不得其解</p>
 <p>看了师傅的wp，才知道robots.txt里有提示有hint.txt</p>
-<p><img src="C:%5CUsers%5CAdministrator%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20210128194002220.png" alt="image-20210128194002220"></p>
+<p><img src="image-20210128194002220.png" alt="image-20210128194002220"></p>
 <p>因为此题特点是闭合符号被过滤，所以只有一种方法可以绕过，就是在username的参数最后加上 ,作为转义符，把源代码中的 ‘ 转义，使得源代码变成</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">where</span> username=<span class="string">' \'</span><span class="keyword">and</span> <span class="keyword">password</span>=<span class="string">'和恶意代码</span></span><br></pre></td></tr></table></figure>
 
@@ -516,9 +516,9 @@
 
 <p>最后，将得到的username和password写入就能得到flag</p>
 <h3 id="regexp正则注入"><a href="#regexp正则注入" class="headerlink" title="regexp正则注入"></a>regexp正则注入</h3><p>题目：[NCTF2019]SQLi</p>
-<p>正常查看一下用户 select user()<br><img src="https://img2020.cnblogs.com/blog/1655915/202009/1655915-20200926201900247-191358217.jpg" alt="img"></p>
-<p>匹配成功会返回1 select user() regexp ‘^r’;<br><img src="https://img2020.cnblogs.com/blog/1655915/202009/1655915-20200926201947560-2011783503.jpg" alt="img"></p>
-<p>匹配失败返回0  select user() regexp ‘^a’;<br><img src="https://img2020.cnblogs.com/blog/1655915/202009/1655915-20200926202022618-1304796514.jpg" alt="img"></p>
+<p>正常查看一下用户 select user()<br><img src="1655915-20200926201900247-191358217.jpg" alt="img"></p>
+<p>匹配成功会返回1 select user() regexp ‘^r’;<br><img src="1655915-20200926201947560-2011783503.jpg" alt="img"></p>
+<p>匹配失败返回0  select user() regexp ‘^a’;<br><img src="1655915-20200926202022618-1304796514.jpg" alt="img"></p>
 
 
         <hr>
